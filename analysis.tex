@@ -5,7 +5,7 @@ Dokumenty vznikají lineárně, nejdříve se vytvoří návrh také nazývaný 
 na jednotlivé části tvořící dokument, kontroluje se pravopis, stylistika a obsah.
 
 Po všech kontrolách se dokument ještě může vrátit autorovi ke konečné kontrole či korekci. Dále poté putuje nakladateli, který dokument,
-knihu či odbornou publikaci distribuje. Celý tento postup je znázorněn na grafu pod textem.
+knihu či odbornou publikaci distribuje. Celý tento postup je znázorněn na grafu \ref{fig:linflow}.
 
 Z diagramu je patrné, že jakýkoliv moderní systém pro správu dokumentů, by měl myslet na možnosti jednoduchého sdílení dat mezi autory, korektory a dalšími
 subjekty. Aplikace tak nemusí být čistě oreintována na autory, ale měla by nabízet možnost komentovat jednotlivé části dokumentu. Také by měla mít možnost
@@ -14,10 +14,12 @@ nabízet data pouze pro čtení, aby nedošlo k chybám a pokud už k nějakým 
 V neposlední řadě také musíme myslet na formát výstupu našeho programu, program musí podporovat vícero formátů, aby bylo možné jej šířit na více platformách
 a tudíž bylo jej možné dostat vždy ke koncovému uživateli ve formě, kterou může bez potíží otevřít a přečíst.
 
-\clearpage
-\begin{center}
+\begin{figure}[h]
+    \centering
     \includegraphics[width=\textwidth]{linearni_prubeh.png}
-\end{center}
+    \caption{Swimlines diagram}
+    \label{fig:linflow}
+\end{figure}
 
 \section{Modulární přístup}
 
@@ -29,3 +31,4 @@ Jako příklad takového to využití bych viděl v učebních materiálech, spo
 budou se dané definice opakovat. Pokud ale v dané definici objevím chybu a píšu dokumenty lineárně, musím tuto chybu opravit ve všech dokumentech. V případě modulárních dokumentů
 bude pouze stačit opravit definici na jednom místě a změna se promítne ve všech dokumentech. Tímto se také vytvoří nová revize daného dokumentu, takže bude možné jednoduše
 sledovat změny nejenom v daném modulu, ale i v dokumentu jako celku.
+\todo{Přepsat, ozdrojovat, moc osobního hodnocení, popsat například latex}
