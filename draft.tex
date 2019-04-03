@@ -5,25 +5,36 @@ verzovat jednotlivé části textu. Dále nesmíme zapomenout na možnost rozš�
 \section{Užitelská sekce}
 
 V uživatelské sekci bude hlavní důraz kladen na správu uživatelů, zde také musíme myslet na ochranu jejich osobních udajů a díky GDPR také na
-možnost jejich anonymizace.
+možnost jejich anonymizace. Také je potřeba brát v úvahu rozdělení uživatelů na standardní a administrátorské role, které mají rozdílné oprávnění.
+Uživatelem se stává osoba při první interakci s aplikací, v tuto chvíli je osoba brána pouze jako host. Aby se uživatel stal plnohodnotným uživatelem,
+je třeba se nejdříve registrovat, tím si užvatel vytvoří vlastní uživatelský účet, který bude mít standarní práva. Pro získání administrátorských
+oprávnění je potřeba jiného administrátora, který může běžný účet prohlásit za administrátorský. Ještě bude existovat uživatel se oprávněním
+\uv{super admin}, který bude mít práva na všechny operace v rámci systému.
+
+V rámci zjednodušení práce s právy na jednotlivých dokumentech a repozitářích, o kterých se zmíníme později v této kapitole, zavedeme uživatelsky
+definované role, které bude poté možné přiřazovat všem uživatelům. Tyto role budou sloužit k hromadným operacím na uživateli, toto ovšem bude
+přístupné pouze uživatelům, kteří budou mít roli administrátora.
 
 \subsection{GDPR}
+\todo{GDPR}
+\subsection{Příklady užití}
 
-Uživatele se člověk stává už pouhým otevřením naší aplikace, tento uživatel je nyní v roli hosta, který nemá žádné právo, poté má pouze 2 možnosti, buď se
-přihlásí, nebo se registruje jako nový uživatel s právy. Po registraci následuje nutnost potvrdit uživatelský účet jako standardní účet.
-Uživatel, stále v roli host, se nyní může přihlásit do aplikace, kde disponuje základními právy, jakými jsou spravování vlastních repozitářů a dokumentů,
-či sdílení svých prací s ostatními uživateli se standardními právy. Také zde existuje administrátorská role, která má vyšší než standardní práva,
-a to hlavně možnost kontrolovat ostatní uživatele.
+\section{Repozitáře}
 
-O uživatelých si potřebujeme z osobních údajů pamatovat pouze e-mail a uživatelské jméno, které je unikátní pro každého uživatele. Dále si uchováváme
-informace o datu založení, poslední změny a smazání uživatele. Dále si pamatujeme role, které uživatel má přiřazené. Role, krom našich základních čtyř
-(host, standardní, administrátor, super administrátor), mohou být tvořeny administrátory, kteří je pak mohou přiřadit všem ostatním uživatelům. Podpoření
-anonymizace bude založeno na změně uživatelského jména a emailu na sled náhodných znaků, ze kterých nebude patrný původní obsah, tzv. \textit{hash}. Každý z
-uživatelů bude mít možnost smazat svůj účet, nebo si jej plně anonymizovat.
+Než začneme popisovat samotné generování dokumentů, je potřeba si definovat repozitáře našich modulů. Jednotlivé repozitáře nám budou sloužit jako složky,
+které budou obsahovat moduly, ze kterých se pak budou skládat výsledné dokumenty. V rámci repozitářů je potřeba hlavně zajistit správně fungování oprávnění.
+Pokud si uživatel založí nový repozitář, má vůči němu všechny práva, ostatní uživatelé se o tomto repozitáři v tomto stavu nemají jak dozvědět, je pro ně
+skrytý. Pokud se ovšem zakladatel rozhodne svůj obsah repozitáře sdílet, má možnost sdílet repozitář s jednotlivými uživateli, uživatelskými rolemi a nebo
+změnit repozitář na veřejný. Dále má také možnost definovat, jestli je repozitář pro jednotlivé uživatele pouze pro čtení, či použití modulu v dokumenty,
+nebo jestli je možnost moduly i upravovat.
 
-Za data, která užvatelé napíší již v rámci dokumentů neneseme odpovědnost, ovšem v případě smluv, či jiných například úředních dokumentů by bylo dobré
-zajistit možnost jejich vyplnění až při vystavení dokumentu, aby pak tedy nemuseli být v aplikaci vůbec uloženy.
-\todo{Question: Dopsat možnosti parametrizace dat, možná to napsat do analýzy, nebo ještě lépe, konzultovat}
+V neposlední řadě musíme myslet na verzování našich jednotlivých modulů, zde se nabízejí 2 možnosti jak tomuto přistoupit, buď by bylo možné integrovat
+řešení založené na nějaké vcs \todo[inline]{vysvětlit vcs}, nebo je možné implementovat verzování pomocí databáze. V této práci se vydáme cestou
+verzování pomocí databáze, to zařídíme
+
+\subsection{Přehled všech příkladů užití}
+
+\section{Dokumenty}
 
 % this might be used, but not now
 % \begin{center}
