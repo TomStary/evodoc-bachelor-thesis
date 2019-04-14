@@ -14,7 +14,7 @@ z důvodu grafického obsahu). \cite{markdown}
 
 \todo{Místa kde se markdown používá}
 
-Takto vypadá menší ukázka Markdown syntaxe a také výsledek, který je poté generován.
+Takto vypadá menší ukázka Markdown syntaxe a také výsledek, který je poté generován \ref{fig:markdown}.
 
 \clearpage
 
@@ -35,7 +35,12 @@ Takto vypadá menší ukázka Markdown syntaxe a také výsledek, který je pot�
     - [ ] Checkbox
 \end{minted}
 
-\includepdf{example.pdf}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{example.pdf}
+    \caption{Výstup Markdown}
+    \label{fig:markdown}
+\end{figure}
 
 \section{reStructuredText}
 
@@ -46,7 +51,12 @@ a dalších dokumentačních nástrojích, který je jednoduše čitelný a jedn
 
 \inputminted{rst}{example-rst.rst}
 
-\includepdf{example-rst.pdf}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{example-rst.pdf}
+    \caption{Výstup reStructuredText}
+    \label{fig:rstOutput}
+\end{figure}
 
 \section{AsciiDoc}
 
@@ -55,4 +65,9 @@ ale je možné jej exportovat i do formátů jako jsou .epub (formát pro elektr
 
 \inputminted{text}{example-ascii.adoc}
 
-\includepdf{example-ascii.pdf}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{example-ascii.pdf}
+    \caption{Výstup AsciiDoc}
+    \label{fig:asciiOutput}
+\end{figure}
