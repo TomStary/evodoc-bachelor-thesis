@@ -1,13 +1,13 @@
-Nyní je tedy na čase\todo{radši bych tyto části psal víc formálně... Na základě provedené analýzy je možné... (i u ostatních částí)} připravit návrh řešení aplikace, která by zajistila správu modulárních dokumentů, jejich generování/publikaci. Nesmíme zapomenout
-na důležité funkcionality, které jsme si stanovili v první části této kapitoly. Jedná se hlavně o správu uživatelů, možnost tvořit revize a celkově
-verzovat jednotlivé části textu. Dále nesmíme zapomenout na možnost rozšíření aplikace.
+Na základě provedené analýzy máme nyní možnost připravit návrh řešení aplikace, která by zajistila správu modulárních dokumentů, jejich generování/publikaci.
+Nesmíme zapomenout na důležité funkcionality. Jedná se hlavně o správu uživatelů, možnost tvořit revize a celkově verzovat jednotlivé části textu.
+Dále nesmíme zapomenout na možnost rozšíření aplikace.
 
 \section{Užitelská sekce}
 
 V uživatelské sekci bude hlavní důraz kladen na správu uživatelů, zde také musíme myslet na ochranu jejich osobních udajů a díky GDPR také na
 možnost jejich anonymizace. Také je potřeba brát v úvahu rozdělení uživatelů na standardní a administrátorské role, které mají rozdílné oprávnění.
 Uživatelem se stává osoba při první interakci s aplikací, v tuto chvíli je osoba brána pouze jako host. Aby se uživatel stal plnohodnotným uživatelem,
-je třeba se nejdříve registrovat, tím si užvatel\todo{ouch} vytvoří vlastní uživatelský účet, který bude mít standarní\todo{ouch} práva. Pro získání administrátorských
+je třeba se nejdříve registrovat, tím si uživatel vytvoří vlastní uživatelský účet, který bude mít standardní práva. Pro získání administrátorských
 oprávnění je potřeba jiného administrátora, který může běžný účet prohlásit za administrátorský. Ještě bude existovat uživatel se oprávněním
 \uv{super admin}, který bude mít práva na všechny operace v rámci systému.
 
@@ -30,8 +30,9 @@ změnit repozitář na veřejný. Dále má také možnost definovat, jestli je 
 nebo jestli je možnost moduly i upravovat.
 
 V neposlední řadě musíme myslet na verzování našich jednotlivých modulů, zde se nabízejí 2 možnosti jak tomuto přistoupit, buď by bylo možné integrovat
-řešení založené na nějaké vcs \todo[inline]{vysvětlit vcs}, nebo je možné implementovat verzování pomocí databáze. V této práci se vydáme cestou\todo{raději zase formálně ``je zvolena'', ``vybrána'', ...}
-verzování pomocí databáze\todo{proč?}, to zařídíme
+řešení založené na nějaké vcs (version control system), jedná se systém, který zařizuje verzování souborů,
+nebo je možné implementovat verzování pomocí databáze. V této práci budeme volit verzování pomocí databáze a to hlavně z časových důvodů, neboť
+pro použití vcs by bylo nutné udělat kompletní obal na nějaký již existující verzovací systém.
 
 \subsection{Přehled všech příkladů užití}
 

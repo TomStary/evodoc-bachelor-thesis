@@ -1,6 +1,6 @@
-% arara: pdflatex: {options: [-output-directory=build]}
-% arara: biber
-% arara: pdflatex: {options: [-output-directory=build]}
+% arara: pdflatex: {options: [-output-directory=build, --shell-escape]}
+% arara: biber: {options: [--output-directory=build]}
+% arara: pdflatex: {options: [-output-directory=build, --shell-escape]}
 
 % options:
 % thesis=B bachelor's thesis
@@ -33,7 +33,7 @@
 \usepackage{todonotes}
 
 % code snippets
-\usepackage{minted}
+\usepackage[outputdir=build]{minted}
 
 \usepackage{pdfpages}
 

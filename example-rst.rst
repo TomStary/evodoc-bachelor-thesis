@@ -12,3 +12,5 @@ Toto je dokument psaný v reStructuredText.
 *kurzíva*, **tučné**
 
 - Seznam
+
+.. include:: test-rst.rst
