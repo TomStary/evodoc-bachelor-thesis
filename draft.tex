@@ -30,13 +30,6 @@ Po přihlášení musí mít uživatel možnost změnit své vlastní údaje. Pr
 a zároveň ty role vytvářet, či mazat. Každý uživatel také musí disponovat možností deaktivovat svůj účet. Na obrázku \ref{fig:userFlow} je vidět, jak vypadá
 cyklus přihlášení nebo registrace uživatele.
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=8cm]{lifecycle.png}
-    \caption{Diagram přihlášení a registrace uživatele}
-    \label{fig:userFlow}
-\end{figure}
-
 \section{Repozitáře}
 
 Než začneme popisovat samotné generování dokumentů, je potřeba si definovat repozitáře našich modulů. Jednotlivé repozitáře nám budou sloužit jako složky,
@@ -49,15 +42,43 @@ nebo jestli je možnost moduly i upravovat.
 V neposlední řadě musíme myslet na verzování našich jednotlivých modulů, zde se nabízejí 2 možnosti jak tomuto přistoupit, buď by bylo možné integrovat
 řešení založené na nějaké vcs (version control system), jedná se systém, který zařizuje verzování souborů,
 nebo je možné implementovat verzování pomocí databáze. V této práci budeme volit verzování pomocí databáze a to hlavně z časových důvodů, neboť
-pro použití vcs by bylo nutné udělat kompletní obal na nějaký již existující verzovací systém.
+pro použití vcs by bylo nutné udělat kompletní obal na nějaký již existující verzovací systém. Na digramu \ref{fig:moduleDia} je vidět jak by měly
+vypadat vztahy mezi jednotlivými moduly.
 
 \subsection{Přehled všech příkladů užití}
 
+V repozitářích máme 2 hlavní části na které se musíme zaměřit, tou první je nutnost hlídat oprávnění a také je mít možnost spravovat. Tudíž majitel
+repozitáře musí mít možnost ovlivňovat, kdo má, či nemá, přístup do jeho repozitáře. Dále musí mít možnost prohlásit svůj repozitář za veřejný a tím
+dát možnost všem uživatelům do něj vstoupit. Krom oprávnění je potřeba také zajistit vytváření nových modulů a verzování jejich úprav. U verzování je
+potřeba si pamatovat kdo a kdy vytvořil novou verzi. A také možnost vrátit se k určité předchozí verzi.
+
 \section{Dokumenty}
+
+Jelikož už máme definované chování pro jednotlivé repozitáře a jejich moduly, můžeme se vrhnout na návrh dokumentů, které se budou skládat z modulů. Každý
+dokument je tedy soubor modulů, který je možné převést do tisknutelné podoby. Na co ale nesmíme zapomenout, že stejně jako moduly bude možné dokumenty také
+verzovat, zde to bude provedeno pomocí revizí. Každá revize bude nést informace o tom, kdo danou revizi vytvořil a také ponese všechny informace o verzích
+modulu, které jsou na danou revizi použity.
+
+Podobně jako u repozitářů i u dokumentů budeme řešit oprávnění a to stejným způsobem, tudíž každý dokument má svého zakladatele nebo také vlastníka,
+vlastník má možnost rozhodovat o tom, kdo bude moci dokument upravovat (vytvářet nové revize, měnit obsah dokumentu), a kdo bude mít možnost si pouze dokument
+přečíst. Dále také bude možnost prohlásit dokument za veřejný a bude tedy přístupný všem uživatelům.
+
+\subsection{Příklady užití v dokumentech}
+
+Pro dokumenty bude důležité hlavně možnost jejich generovaní do přenosného formátu, jakým je například PDF. Dalším důležitou funkcionalitou bude možnost přiřazování
+oprávnění jako je tomu u repozitářů, nesmí chybět ani možnost dokument prohlásit za veřejný a tím jej spřístupnit všem uživatelům. Je také potřeba myslet na možnost
+procházet a generovat i starší revize.
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=\textwidth]{module_diagram.png}
+    \includegraphics[width=\textwidth]{lifecycle.png}
+    \caption{Diagram přihlášení a registrace uživatele}
+    \label{fig:userFlow}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{module_diagram.pdf}
     \caption{Návrh rozložení modelů}
     \label{fig:moduleDia}
 \end{figure}
