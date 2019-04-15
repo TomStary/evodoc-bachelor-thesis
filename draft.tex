@@ -25,9 +25,20 @@ zásahy do databáze, kde využijeme možnosti změnit email na jeho hash. \cite
 
 \subsection{Příklady užití}
 
+Nyní si připomeňme co naše aplikace musí určitě umět z uživatelské sekce, kdokoliv musí mít právo si založit svůj účet a mít možnost se do něho přihlásit.
+Po přihlášení musí mít uživatel možnost změnit své vlastní údaje. Pro administrátorské účty musí být zpřístupněna možnost přiřadit role ostatním uživatelům
+a zároveň ty role vytvářet, či mazat. Každý uživatel také musí disponovat možností deaktivovat svůj účet. Na obrázku \ref{fig:userFlow} je vidět, jak vypadá
+cyklus přihlášení nebo registrace uživatele.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=8cm]{lifecycle.png}
+    \caption{Diagram přihlášení a registrace uživatele}
+    \label{fig:userFlow}
+\end{figure}
+
 \section{Repozitáře}
 
-\todo{Na tohle by se hodil nějaký obrázek/diagram}
 Než začneme popisovat samotné generování dokumentů, je potřeba si definovat repozitáře našich modulů. Jednotlivé repozitáře nám budou sloužit jako složky,
 které budou obsahovat moduly, ze kterých se pak budou skládat výsledné dokumenty. V rámci repozitářů je potřeba hlavně zajistit správně fungování oprávnění.
 Pokud si uživatel založí nový repozitář, má vůči němu všechny práva, ostatní uživatelé se o tomto repozitáři v tomto stavu nemají jak dozvědět, je pro ně
@@ -44,7 +55,9 @@ pro použití vcs by bylo nutné udělat kompletní obal na nějaký již existu
 
 \section{Dokumenty}
 
-% this might be used, but not now
-% \begin{center}
-%     \includegraphics[width=8cm]{lifecycle.png}
-% \end{center}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{module_diagram.png}
+    \caption{Návrh rozložení modelů}
+    \label{fig:moduleDia}
+\end{figure}
