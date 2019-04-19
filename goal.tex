@@ -1,8 +1,8 @@
 Cílem této práce je vytvořit aplikaci pro správu a úpravu modulárních dokumentů. Aplikace bude řešit oprávnění uživatelů, přístup do
-jednotlivých repozitářů, což jsou složky s jednotlivými moduly. Důležité je také verzování a to jak dokumentů, tak i jednotlivých modulů, díky tomu
-bude možné generovat i starší vydání dokumentů. Aplikace bude formou webové aplikace, která bude rozdělená na dva samostatné projekty.
-Prvním bude fronted, který bude zajišťovat rozhraní pro uživatele. Pro přístup k datům bude sloužit backend, který díky api zpřístupní datovou vrstvu
-celé aplikace. Backend také bude kontrolovat uživatelská práva a správu uživatelů.
-\todo{vysvětlivky k api ie. aplikační rozhraní}
-\todo{min bude}
-\todo{Popsat strukturu práce - jak se bude postupovat k naplnění cílů, případně jaké budou dílčí cíle}
+jednotlivých repozitářů, což jsou složky s jednotlivými moduly. U jednotlivých modulů musíme myslet na jejich verzování, tedy možnost
+vracet se zpět v jednotlivých úpravách. Díky tomuto verzování umožníme generování dokumentů i retrospektivně. Dokumenty, které jsou
+složeny z jednotlivých modulů je možné také verzovat a to pomocí revizí, které si budou pamatovat jaké verze modulů byly použity.
+
+Samotná implementace bude rozdělena na 2 části. První částí je backend, který nám umožnuje přístup k datům pomocí webového aplikačního
+prostředí. Backend má také zajišťovat ověřování uživatelů a oprávnění a možnost jejich správy. Frontend nám bude zpřístupňovat backend
+ve webovém prohlízeči, jedná se ale o samostatnou aplikaci, která pouze komunikuje a získává data z backendu.
