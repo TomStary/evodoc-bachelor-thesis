@@ -27,12 +27,12 @@ zásahy do databáze, kde využijeme možnosti změnit email na jeho hash. \cite
 
 Nyní si připomeňme co naše aplikace musí určitě umět z uživatelské sekce, kdokoliv musí mít právo si založit svůj účet a mít možnost se do něho přihlásit.
 Po přihlášení musí mít uživatel možnost změnit své vlastní údaje. Pro administrátorské účty musí být zpřístupněna možnost přiřadit role ostatním uživatelům
-a zároveň ty role vytvářet, či mazat. Každý uživatel také musí disponovat možností deaktivovat svůj účet. Na obrázku \ref{fig:userFlow} je vidět, jak vypadá
+a zároveň ty role vytvářet, či mazat. Každý uživatel také musí disponovat možností deaktivovat svůj účet. Na obrázku \ref{fig:userFlow} je vidět, jak \mbox{vypadá}
 cyklus přihlášení nebo registrace uživatele.
 
 \section{Repozitáře}
 
-Než začneme popisovat samotné generování dokumentů, je potřeba si definovat repozitáře našich modulů. Jednotlivé repozitáře nám budou sloužit jako složky,
+Než začneme popisovat samotné generování dokumentů, je potřeba si \mbox{definovat} repozitáře našich modulů. Jednotlivé repozitáře nám budou sloužit jako složky,
 které budou obsahovat moduly, ze kterých se pak budou skládat výsledné dokumenty. V rámci repozitářů je potřeba hlavně zajistit správně fungování oprávnění.
 Pokud si uživatel založí nový repozitář, má vůči němu všechny práva, ostatní uživatelé se o tomto repozitáři v tomto stavu nemají jak dozvědět, je pro ně
 skrytý. Pokud se ovšem zakladatel rozhodne svůj obsah repozitáře sdílet, má možnost sdílet repozitář s jednotlivými uživateli, uživatelskými rolemi a nebo

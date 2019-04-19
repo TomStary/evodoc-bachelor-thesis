@@ -1,4 +1,5 @@
 % arara: pdflatex: {options: [-output-directory=build, --shell-escape]}
+% arara: makeglossaries: {options: [-dbuild]}
 % arara: biber: {options: [--output-directory=build]}
 % arara: pdflatex: {options: [-output-directory=build, --shell-escape]}
 
@@ -38,9 +39,10 @@
 \usepackage{pdfpages}
 
 % % list of acronyms
-% \usepackage[acronym,nonumberlist,toc,numberedsection=autolabel]{glossaries}
-% \iflanguage{czech}{\renewcommand*{\acronymname}{Seznam pou{\v z}it{\' y}ch zkratek}}{}
-% \makeglossaries
+\usepackage[acronym,nonumberlist,toc,numberedsection=autolabel]{glossaries}
+\usepackage{glossaries-extra}
+\iflanguage{czech}{\renewcommand*{\acronymname}{Seznam pou{\v z}it{\' y}ch zkratek}}{}
+\makeglossaries
 
 \newcommand{\tg}{\mathop{\mathrm{tg}}} %cesky tangens
 \newcommand{\cotg}{\mathop{\mathrm{cotg}}} %cesky cotangens
@@ -65,10 +67,24 @@
 \keywordsEN{Nahraďte seznamem klíčových slov v angličtině oddělených čárkou.}
 % \website{http://site.example/thesis} %volitelná URL práce, objeví se v tiráži - úplně odstraňte, nemáte-li URL práce
 
-\begin{document}
+\newglossaryentry{CVUT}
+{
+	name=ČVUT,
+	description={České vysoké učení technické v Praze}
+}
+\newacronym{FIT}{FIT}{Fakulta informačních technologií}
+\newglossaryentry{xml}
+{
+	name=XML,
+	description={Extensible Markup Language}
+}
+\newglossaryentry{html}
+{
+	name=HTML,
+	description={HyperText Markup Language}
+}
 
-% \newacronym{CVUT}{{\v C}VUT}{{\v C}esk{\' e} vysok{\' e} u{\v c}en{\' i} technick{\' e} v Praze}
-% \newacronym{FIT}{FIT}{Fakulta informa{\v c}n{\' i}ch technologi{\' i}}
+\begin{document}
 
 \begin{introduction}
 	\input{introduction}
@@ -102,12 +118,7 @@
 \printbibliography
 \appendix
 
-\chapter{Seznam použitých zkratek}
-% \printglossaries
-\begin{description}
-	\item[GUI] Graphical user interface
-	\item[XML] Extensible markup language
-\end{description}
+\printglossaries
 
 \chapter{Obsah přiloženého CD}
 
