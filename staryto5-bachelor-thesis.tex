@@ -37,6 +37,7 @@
 \usepackage[outputdir=build]{minted}
 
 \usepackage{pdfpages}
+\usepackage{listings}
 
 % % list of acronyms
 \usepackage[acronym,nonumberlist,toc,numberedsection=autolabel]{glossaries}
@@ -66,6 +67,9 @@
 \keywordsEN{documents, modular docments, reStructuredText, AsciiDoc, python, ruby}
 % \website{http://site.example/thesis} %volitelná URL práce, objeví se v tiráži - úplně odstraňte, nemáte-li URL práce
 
+\renewcommand\listingscaption{Zdrojový kód}
+\renewcommand\listoflistingscaption{Seznam zdrojových kódů}
+
 \newglossaryentry{CVUT}
 {
 	name=ČVUT,
@@ -86,6 +90,21 @@
 {
 	name=PDF,
 	description={Portable Document Format}
+}
+\newglossaryentry{jwt}
+{
+	name=JWT,
+	description={JSON Web Token}
+}
+\newglossaryentry{orm}
+{
+	name=ORM,
+	description={Object Relational Mapper, neboli propojení objektů z prostředí programu do tabulek v databázi}
+}
+\newglossaryentry{guid}
+{
+	name=GUID,
+	description={Globally Unique Identifier, jedná se o unikátní identifikátor, který by měl být naprosto unikátní, jinak se také označují jako UUID (Universaly Unique Identifiers)}
 }
 
 \begin{document}
@@ -112,7 +131,6 @@
 \chapter{Realizace}
 \input{implementation}
 
-\todo{Dopsat pro jaké řešení jsem se rozhodl}
 \todo{chapter: mozne vylepseni}
 
 \begin{conclusion}
