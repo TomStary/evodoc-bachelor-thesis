@@ -19,26 +19,10 @@ Takto vypadá menší ukázka Markdown syntaxe a také výsledek, který je pot�
 
 \clearpage
 
-\begin{minted}{md}
-    # Ukázkový příklad Markdown syntaxe
-
-    Takto vypadá dokument psaný v Markdown,
-    jak je vidět, od čistého textu se moc neliší.
-
-    ## Víceúrovňové nadpisy
-
-    *kurzíva*, **tučné**, ~~přeskrtnuní~~
-
-    - příklad
-    - jednoduchého
-    - seznamu
-
-    - [ ] Checkbox
-\end{minted}
+\inputminted[linenos,breaklines]{md}{example.md}
 
 \begin{figure}[h]
-    \centering
-    \includegraphics[width=\textwidth]{example.pdf}
+    \includegraphics[height=\textheight]{example.pdf}
     \caption{Výstup Markdown}
     \label{fig:markdown}
 \end{figure}
