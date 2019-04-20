@@ -1,16 +1,13 @@
-Ukázkový nadpis
-===============
-Podobně jako u Markdown
+..File: example-rst.rst
+
+Ukázkový text ve formátu reStructuredText
+=========================================
+Nižší úroveň nadpisu
 -----------------------
 
-Ovšem mají svá omezení, každy první nadpis je
-brán jako titulek, ostatní jsou jenom nadpisy sekcí,
-oproti Markdownu, který umí víceúroňové nadpisy
+Podobně jako Markdown, nabízí reStructuredText také možnost
+formátování textu *kurzíva*, **tučné**. Oproti Markdown má
+reStructuredText možnost vkládat další soubory a tudíž, dokument
+může být rozdělen na jednotlivé části, nebo lépe moduly.
 
-Toto je dokument psaný v reStructuredText.
-
-*kurzíva*, **tučné**
-
-- Seznam
-
-.. include:: test-rst.rst
+.. include:: module.rst

@@ -6,6 +6,8 @@ značkovacích jazyků má jasně rozlišitelné značky, nebo jinak také tagy,
 Mezi značkovací jazyky například patří i jazyky používané při psaní webových stránek, jako je \gls{html} či \gls{xml}, ovšem tyto jazyky budeme spíše využívat pro zobrazování výstupu
 jednodušších značkovacích jazyků jako je například Markdown.
 
+\clearpage
+
 \section{Markdown}
 
 Markdown je značkovací jazyk, který převádí text do \gls{html}. Jedná se o jednoduše čitelný a zároveň jednoduchý jazyk na psaní strukturovaného textu. Hlavní myšlenkou Markdown je, že
@@ -17,15 +19,9 @@ tagy/značky. Podobnou úpravu Markdown má i konkurenční služba GitLab.
 
 Takto vypadá menší ukázka Markdown syntaxe a také výsledek, který je poté generován \ref{fig:markdown}.
 
-\clearpage
-
 \inputminted[linenos,breaklines]{md}{example.md}
 
-\begin{figure}[h]
-    \includegraphics[height=\textheight]{example.pdf}
-    \caption{Výstup Markdown}
-    \label{fig:markdown}
-\end{figure}
+\clearpage
 
 \section{reStructuredText}
 
@@ -39,14 +35,10 @@ Docutil podporuje formát reStructuredText, proto jej v rámci teto sekci lehce 
 Díky využití reStructuredText se tedy jedná o nástroj na tvorbu modulárních dokumentů, ovšem tento nástroj je určen spíše pro programátory na vytváření dokumentace a nehodí se
 pro běžného uživatele.
 
-\inputminted{rst}{example-rst.rst}
+\inputminted[linenos,breaklines]{rst}{example-rst.rst}
+\inputminted[linenos,breaklines]{rst}{module.rst}
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\textwidth]{example-rst.pdf}
-    \caption{Výstup reStructuredText}
-    \label{fig:rstOutput}
-\end{figure}
+\clearpage
 
 \section{AsciiDoc}
 
@@ -55,12 +47,26 @@ ale je možné jej exportovat i do formátů jako jsou .epub (formát pro elektr
 
 Projekt byl původně psán pro jazyk python, ovšem posléze byla syntaxe adoptována jako balíček pro jazyk ruby a také přejmenován na AsciiDoctor.
 
-\inputminted{text}{example-ascii.adoc}
-\todo{better sample text}
+\inputminted[linenos,breaklines]{text}{example-ascii.adoc}
+\inputminted[linenos,breaklines]{text}{module.adoc}
 
 \section{Porovnání}
 
 Po představení těchto 3 značkovacích jazyků je na čase si je zhodnotit vzhledem k této práci a vybrat z nich ten, který poté použijeme v rámci implementace.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{example.pdf}
+    \caption{Výstup Markdown}
+    \label{fig:markdown}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{example-rst.pdf}
+    \caption{Výstup reStructuredText}
+    \label{fig:rstOutput}
+\end{figure}
 
 \begin{figure}[h]
     \centering

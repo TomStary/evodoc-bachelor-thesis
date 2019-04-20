@@ -1,13 +1,11 @@
-Nadpis
-======
-:ascii-ids:
+//File: example-ascii.adoc
 
-První úroveň
-------------
+== Ukázkový text ve formátu AsciiDoc
 
-Druhá
-~~~~~
+=== Nižší úroveň nadpisu
 
-_kurzíva_, *tučné*
+Podobně jako Markdown a reStructuredText, nabízí AsciiDoc také možnost formátování textu *kurzíva*, **tučné**. Stejně jako
+reStructuredText nabízí i AsciiDoc možnost vkládání dalších modulů/částí.
 
-- Seznam
+include::module.adoc[]
+
