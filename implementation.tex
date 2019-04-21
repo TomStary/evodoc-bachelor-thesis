@@ -41,8 +41,64 @@ oprávnění uživatele a získávání dat, která jsou vázána na uživatele,
 
 \subsection{Propojení s databází}
 
-Na toto použijeme další rozšíření pro Flask a to konkrétně Flask-Sqlalchemy, jedná se interpretaci Sqlalchemy, což je \gls{orm} nástroj pro python. Podporuje většinu SQL
-implementací a serverů. V našem případě budeme brát \textit{postgresql} jako nejvhodnější jazyk a databázový server se zaručenou podporou pro \textit{sqlite}. Protože
-v aplikaci používáme jako identifikátor všech modelů používáme \gls{guid}
+Na toto použijeme další rozšíření pro \textit{Flask} a to konkrétně \textit{Flask-Sqlalchemy}, jedná se interpretaci \textit{Sqlalchemy}, což je \gls{orm} nástroj pro python.
+Podporuje většinu \gls{sql} implementací a serverů. V našem případě budeme brát \textit{postgresql} jako nejvhodnější jazyk a databázový server se zaručenou podporou pro \textit{sqlite}. Protože
+v aplikaci používáme jako identifikátor všech modelů používáme \gls{guid}, základní implementace \textit{Sqlalchemy} nám ovšem tento datový typ nativně nepodporuje, stejně jako
+některé \gls{sql} servery. Proto si vytvoříme vlastní datový typ \gls{guid}, ukázku jak na to nalezeme i v oficiální dokumentaci \textit{Sqlalchemy} \cite{sqlalchemyGuid}. Jak lze
+vidět v ukázce kódu \ref{lst:guidImplementation}, při vytváření tohoto typu je provedena kontrola, na s jakou databází bude aplikace pracovat a podle toho se rozhodne jaký datový typ
+bude v rámci databáze použit. Toto se provádí protože ne všechny databáze si umí poradit s GUID datovým formátem.
+
+\begin{listing}
+    \begin{minted}{python}
+        from sqlalchemy.types import TypeDecorator, CHAR
+        from sqlalchemy.dialects.postgresql import UUID
+        import uuid
+
+        class GUID(TypeDecorator):
+            """Platform-independent GUID type.
+
+            Uses PostgreSQL's UUID type, otherwise uses
+            CHAR(32), storing as stringified hex values.
+
+            """
+            impl = CHAR
+
+            def load_dialect_impl(self, dialect):
+                if dialect.name == 'postgresql':
+                    return dialect.type_descriptor(UUID())
+                else:
+                    return dialect.type_descriptor(CHAR(32))
+
+            def process_bind_param(self, value, dialect):
+                if value is None:
+                    return value
+                elif dialect.name == 'postgresql':
+                    return str(value)
+                else:
+                    if not isinstance(value, uuid.UUID):
+                        return "%.32x" % uuid.UUID(value).int
+                    else:
+                        # hexstring
+                        return "%.32x" % value.int
+
+            def process_result_value(self, value, dialect):
+                if value is None:
+                    return value
+                else:
+                    if not isinstance(value, uuid.UUID):
+                        value = uuid.UUID(value)
+                    return value
+    \end{minted}
+    \caption{Implementace GUID datového typu}
+    \label{lst:guidImplementation}
+\end{listing}
+
+\clearpage
+
+\subsection{Kontrola příchozích dat}
+
+Jako v každém programu je potřeba kontrolovat vstupní data, je i v našem případě nutné kontrolovat data, která přijdou z našeho frontendu, nebo například z mobilní aplikace,
+která se bude připojovat na náš backend. Pro kontrolu dat použijeme implementaci schémat z dalšího modulu pro python, \textit{marshmallow}. Tento modul nám umožní definovat
+nejen formát dat, ale také definuje formát výstupních dat, která budou načtena přímo z výstupu dotazu nebo objektu z \textit{Sqlalchemy}.
 
 \section{Frontend}
