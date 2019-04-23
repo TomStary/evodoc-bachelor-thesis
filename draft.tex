@@ -4,7 +4,7 @@ Dále nesmíme zapomenout na možnost rozšíření aplikace.
 
 \section{Užitelská sekce}
 
-V uživatelské sekci bude hlavní důraz kladen na správu uživatelů, zde také musíme myslet na ochranu jejich osobních udajů a díky GDPR také na
+V uživatelské sekci bude hlavní důraz kladen na správu uživatelů, zde také musíme myslet na ochranu jejich osobních udajů a díky \gls{gdpr} také na
 možnost jejich anonymizace. Také je potřeba brát v úvahu rozdělení uživatelů na standardní a administrátorské role, které mají rozdílné oprávnění.
 Uživatelem se stává osoba při první interakci s aplikací, v tuto chvíli je osoba brána pouze jako host. Aby se uživatel stal plnohodnotným uživatelem,
 je třeba se nejdříve registrovat, tím si uživatel vytvoří vlastní uživatelský účet, který bude mít standardní práva. Pro získání administrátorských
@@ -15,10 +15,10 @@ V rámci zjednodušení práce s právy na jednotlivých dokumentech a repozitá
 definované role, které bude poté možné přiřazovat všem uživatelům. Tyto role budou sloužit k hromadným operacím na uživateli, toto ovšem bude
 přístupné pouze uživatelům, kteří budou mít roli administrátora.
 
-\subsection{GDPR}
+\subsection{\gls{gdpr}}
 
-Naše aplikace bude pracovat s osobními údaji a je nutné toto brát na vědomí, proto se nyní podívejme na to, co musí naše aplikace splňovat, aby dodržela všechny
-zákony o ochraně osobních údají a směrnice Evropské unie, GDPR. První co je nutné brát na vědomí je účel, za kterým údaje chceme údaje sbírat a uchovávat a jestli je náš
+Neboť bude naše aplikace pracovat s osobními údaji, je nutné toto brát na vědomí, proto se nyní podívejme na to, co musí naše aplikace splňovat, aby dodržela všechny
+zákony o ochraně osobních údají a směrnice Evropské unie, \gls{gdpr}. První co je nutné brát na vědomí je účel, za kterým údaje chceme údaje sbírat a uchovávat a jestli je náš
 účel oprávněný. V tomto případě o uživateli získáme osobní údaj v podobě emailu, který stačí k identifikaci určité osoby. V našem případě je email identifikátor uživatele
 a budeme jej při registraci žádat o souhlas se zpracováním osobních údajů. Dále musíme myslet na možnost smazání či anonymizace údajů uživatele. Toho docílíme ručními
 zásahy do databáze, kde využijeme možnosti změnit email na jeho hash. \cite{gdpr}
