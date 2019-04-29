@@ -1,4 +1,5 @@
-Na základě provedené analýzy máme nyní možnost připravit návrh řešení aplikace, která by zajistila správu modulárních dokumentů, jejich generování/publikaci.
+Na základě provedené analýzy máme nyní možnost připravit návrh řešení aplikace, která by zajistila správu modulárních dokumentů, jejich\linebreak
+generování/publikaci.
 Nesmíme zapomenout na důležité funkcionality. Jedná se hlavně o správu uživatelů, možnost tvořit revize a celkově verzovat jednotlivé části textu.
 Dále nesmíme zapomenout na možnost rozšíření aplikace.
 
@@ -17,7 +18,7 @@ přístupné pouze uživatelům, kteří budou mít roli administrátora.
 
 \subsection{\gls{gdpr}}
 
-Neboť bude naše aplikace pracovat s osobními údaji, je nutné toto brát na vědomí, proto se nyní podívejme na to, co musí naše aplikace splňovat, aby dodržela všechny
+Neboť bude naše aplikace pracovat s osobními údaji, je nutné toto brát\linebreak na~vědomí, proto se nyní podívejme na to, co musí naše aplikace splňovat, aby dodržela všechny
 zákony o ochraně osobních údají a směrnice Evropské unie, \gls{gdpr}. První co je nutné brát na vědomí je účel, za kterým údaje chceme údaje sbírat a uchovávat a jestli je náš
 účel oprávněný. V tomto případě o uživateli získáme osobní údaj v podobě emailu, který stačí k identifikaci určité osoby. V našem případě je email identifikátor uživatele
 a budeme jej při registraci žádat o souhlas se zpracováním osobních údajů. Dále musíme myslet na možnost smazání či anonymizace údajů uživatele. Toho docílíme ručními
@@ -26,7 +27,7 @@ zásahy do databáze, kde využijeme možnosti změnit email na jeho hash. \cite
 \subsection{Příklady užití}
 
 Nyní si připomeňme co naše aplikace musí určitě umět z uživatelské sekce, kdokoliv musí mít právo si založit svůj účet a mít možnost se do něho přihlásit.
-Po přihlášení musí mít uživatel možnost změnit své vlastní údaje. Pro administrátorské účty musí být zpřístupněna možnost přiřadit role ostatním uživatelům
+Po přihlášení musí mít uživatel možnost změnit své vlastní údaje. Pro\linebreak \mbox{administrátorské} účty musí být zpřístupněna možnost přiřadit role ostatním uživatelům
 a zároveň ty role vytvářet, či mazat. Každý uživatel také musí disponovat možností deaktivovat svůj účet. Na obrázku \ref{fig:userFlow} je vidět, jak \mbox{vypadá}
 cyklus přihlášení nebo registrace uživatele.
 
