@@ -87,7 +87,17 @@ Pro lepší představu o jednotlivých případech užití je zde přiložen UC 
 
 \section{Návrh architektury aplikace}
 
-Jak bylo již řečeno v kapitole o cílech práce, aplikace by měla být rozdělena na 2 části backend a frontend. Nyní si pojdmě
+Jak bylo již řečeno v kapitole o cílech práce, aplikace by měla být rozdělena na 2 části backend a frontend. Nyní si pojdmě navrhnout architekturu, která bude
+vyhovovat tomuto cíly. Pro backend je důležité, aby měl přístup k databázi, ve~které budou uložena všechna data, jediná možnost jak komunikovat s backendem bude
+skrze webové rozhraní. Propojeni s backendem nám bude zajišťovat frontendová část, ta bude umět komunikovat a zobrazovat data v~grafické podobě, nadále nám také
+poslouží k udržení identity po přihlášení. Na tomoto diagramu \ref{fig:softCompDia} je znázorněno rozložení jednotlivých komponent dle návrhu.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{soft_comp_dia.pdf}
+    \caption{Diagram komponent}
+    \label{fig:softCompDia}
+\end{figure}
 
 \begin{figure}[h]
     \centering

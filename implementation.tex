@@ -4,10 +4,10 @@ je zodpovědné za komunikaci s backendem a také bude zpostředkovávat zobraze
 
 \section{Backend}
 
-Jako základ backendu máme Flask, \uv{což je mikroframework pro python\linebreak založený na Werkzeug, Jinja 2 a dobrých záměrů.} \cite{flaskDoc}
-Tento mikroframework nabízí vytváření stránek ve formátu \gls{html}, toto ovšem nebude třeba, neboť celý backend je složen pouze z rest metod,
+Jako základ backendu máme Flask, \uv{což je mikroframework pro Python\linebreak založený na Werkzeug, Jinja 2 a dobrých záměrů.} \cite{flaskDoc}
+Tento mikroframework nabízí vytváření stránek ve formátu \gls{html}, toto ovšem nebude třeba, \mbox{neboť} celý backend je složen pouze z \gls{rest} metod,
 které slouží k získání či úpravě dat. Konkrétně použijeme HTTP metody GET, POST a DELETE, které provedou určitou akci na základě volané adresy.
-Pro další funkcnionality využíváme v mnoha případech moduly, které rozšižují základní Flask.
+Pro další funkcnionality\linebreak využíváme v mnoha případech moduly, které rozšižují základní Flask.
 
 \subsection{Ověřování uživatele}
 
@@ -41,7 +41,7 @@ oprávnění uživatele a získávání dat, která jsou vázána na uživatele,
 
 \subsection{Propojení s databází}
 
-Na toto použijeme další rozšíření pro \textit{Flask} a to konkrétně \textit{Flask-SQLAlchemy}, jedná se interpretaci \textit{SQLAlchemy}, což je \gls{orm} nástroj pro python.
+Na toto použijeme další rozšíření pro \textit{Flask} a to konkrétně \textit{Flask-SQLAlchemy}, jedná se interpretaci \textit{SQLAlchemy}, což je \gls{orm} nástroj pro Python.
 Podporuje většinu \gls{sql} implementací a serverů. V našem případě budeme brát \textit{postgresql} jako nejvhodnější jazyk a databázový server se zaručenou podporou pro \textit{sqlite}. Protože
 v aplikaci používáme jako identifikátor všech modelů používáme \gls{guid}, základní implementace \textit{SQLAlchemy} nám ovšem tento datový typ nativně nepodporuje, stejně jako
 některé \gls{sql} servery. Proto si vytvoříme vlastní datový typ \gls{guid}, ukázku jak na to nalezeme i v oficiální dokumentaci \textit{SQLAlchemy} \cite{sqlalchemyGuid}. Jak lze
@@ -98,7 +98,9 @@ bude v rámci databáze použit. Toto se provádí protože ne všechny databáz
 \subsection{Kontrola příchozích dat}
 
 Jako v každém programu je potřeba kontrolovat vstupní data, je i v našem případě nutné kontrolovat data, která přijdou z našeho frontendu, nebo například z mobilní aplikace,
-která se bude připojovat na náš backend. Pro kontrolu dat použijeme implementaci schémat z dalšího modulu pro python, \textit{marshmallow}. Tento modul nám umožní definovat
+která se bude připojovat na náš backend. Pro kontrolu dat použijeme implementaci schémat z dalšího modulu pro Python, \textit{marshmallow}. Tento modul nám umožní definovat
 nejen formát dat, ale také definuje formát výstupních dat, která budou načtena přímo z výstupu dotazu nebo objektu z \textit{SQLAlchemy}.
 
 \section{Frontend}
+
+Hlavní myšlenkou frontendu je přívětivé podání dat uživatelům, je důležité aby se aplikace dala jednoduše ovládat a nebyla složitá na pochopení pro nového uživatele.
