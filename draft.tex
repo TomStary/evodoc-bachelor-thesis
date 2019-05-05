@@ -26,45 +26,6 @@ zákony o ochraně osobních údají a směrnice Evropské unie, \gls{gdpr}. Prv
 a budeme jej při registraci žádat o souhlas se zpracováním osobních údajů. Dále musíme myslet na možnost smazání či anonymizace údajů uživatele. Toho docílíme ručními
 zásahy do databáze, kde využijeme možnosti změnit email na jeho hash. \cite{gdpr}
 
-\section{Repozitáře}
-
-Než začneme popisovat samotné generování dokumentů, je potřeba si \mbox{definovat} repozitáře našich modulů. Jednotlivé repozitáře nám budou sloužit jako složky,
-které budou obsahovat moduly, ze kterých se pak budou skládat výsledné dokumenty. V rámci repozitářů je potřeba hlavně zajistit správně fungování oprávnění.
-Pokud si uživatel založí nový repozitář, má vůči němu všechny práva, ostatní uživatelé se o tomto repozitáři v tomto stavu nemají jak\linebreak dozvědět, je pro ně
-skrytý. Pokud se ovšem zakladatel rozhodne svůj obsah repozitáře sdílet, má možnost sdílet repozitář s jednotlivými uživateli, uživatelskými rolemi a nebo
-změnit repozitář na veřejný. Dále má také možnost definovat, jestli je repozitář pro jednotlivé uživatele pouze pro čtení, či použití modulu v dokumenty,
-nebo jestli je možnost moduly i upravovat.
-
-V neposlední řadě musíme myslet na verzování našich jednotlivých modulů, zde se nabízejí 2 možnosti jak tomuto přistoupit, buď by bylo možné integrovat
-řešení založené na nějaké \gls{vcs}, jedná se systém, který zařizuje verzování souborů,
-nebo je možné implementovat verzování pomocí databáze. V této práci budeme volit verzování pomocí databáze a to hlavně z časových důvodů, neboť
-pro použití vcs by bylo nutné udělat kompletní obal na nějaký již existující verzovací systém. Na digramu \ref{fig:moduleDia} je vidět jak by měly
-vypadat vztahy mezi jednotlivými moduly.
-\todo{uc pro repozitáře a dokumenty}
-\subsection{Přehled všech příkladů užití}
-
-V repozitářích máme 2 hlavní části na které se musíme zaměřit, tou první je nutnost hlídat oprávnění a také je mít možnost spravovat. Tudíž majitel
-repozitáře musí mít možnost ovlivňovat, kdo má, či nemá, přístup do jeho repozitáře. Dále musí mít možnost prohlásit svůj repozitář za veřejný a tím
-dát možnost všem uživatelům do něj vstoupit. Krom oprávnění je potřeba také zajistit vytváření nových modulů a verzování jejich úprav. U verzování je
-potřeba si pamatovat kdo a kdy vytvořil novou verzi. A také možnost vrátit se k určité předchozí verzi.
-
-\section{Dokumenty}
-
-Jelikož už máme definované chování pro jednotlivé repozitáře a jejich moduly, můžeme se vrhnout na návrh dokumentů, které se budou skládat z modulů. Každý
-dokument je tedy soubor modulů, který je možné převést do tisknutelné podoby. Na co ale nesmíme zapomenout, že stejně jako moduly bude možné dokumenty také
-verzovat, zde to bude provedeno pomocí revizí. Každá revize bude nést informace o tom, kdo danou revizi vytvořil a také ponese všechny informace o verzích
-modulu, které jsou na danou revizi použity.
-
-Podobně jako u repozitářů i u dokumentů budeme řešit oprávnění a to stejným způsobem, tudíž každý dokument má svého zakladatele nebo také vlastníka,
-vlastník má možnost rozhodovat o tom, kdo bude moci dokument upravovat (vytvářet nové revize, měnit obsah dokumentu), a kdo bude mít možnost si pouze dokument
-přečíst. Dále také bude možnost prohlásit dokument za veřejný a bude tedy přístupný všem uživatelům.
-
-\subsection{Příklady užití v dokumentech}
-
-Pro dokumenty bude důležité hlavně možnost jejich generovaní do přenosného formátu, jakým je například \gls{pdf}. Dalším důležitou funkcionalitou bude možnost přiřazování
-oprávnění jako je tomu u repozitářů, nesmí chybět ani možnost dokument prohlásit za veřejný a tím jej spřístupnit všem uživatelům. Je také potřeba myslet na možnost
-procházet a generovat i starší revize.
-
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{userUCDiagram.pdf}
@@ -78,6 +39,55 @@ procházet a generovat i starší revize.
     \caption{Diagram přihlášení a registrace uživatele}
     \label{fig:userFlow}
 \end{figure}
+
+\section{Repozitáře}
+
+Než začneme popisovat samotné generování dokumentů, je potřeba si \mbox{definovat} repozitáře našich modulů. Jednotlivé repozitáře nám budou sloužit jako složky,
+které budou obsahovat moduly, ze kterých se pak budou skládat výsledné dokumenty. V rámci repozitářů je potřeba hlavně zajistit správně fungování oprávnění.
+Pokud si uživatel založí nový repozitář, má vůči němu všechny práva, ostatní uživatelé se o tomto repozitáři v tomto stavu nemají jak\linebreak dozvědět, je pro ně
+skrytý. Pokud se ovšem zakladatel rozhodne svůj obsah repozitáře sdílet, má možnost sdílet repozitář s ostatními uživateli.
+Dále má také možnost definovat, jestli je repozitář pro jednotlivé uživatele pouze pro čtení, či použití modulu v dokumentu,
+nebo jestli má možnost moduly i upravovat.
+
+V neposlední řadě musíme myslet na verzování našich jednotlivých modulů, zde se nabízejí 2 možnosti jak tomuto přistoupit, buď by bylo možné integrovat
+řešení založené na nějaké \gls{vcs}, jedná se systém, který zařizuje verzování souborů,
+nebo je možné implementovat verzování pomocí databáze. V této práci budeme volit verzování pomocí databáze a to hlavně z časových důvodů, neboť
+pro použití vcs by bylo nutné udělat kompletní obal na nějaký již existující verzovací systém. Na digramu \ref{fig:moduleDia} je vidět, jak by měly
+vypadat vztahy mezi jednotlivými moduly.
+
+Pro jednodušší představu toho jaké jsou nám z návrhu vyplynuli příklady užití je vytvořen diagram UC pro repozitáře \ref{fig:repositoryUC}. V tomto diagramu je dbáno i na rozdělení
+uživatelů podle úrovně jejich oprávnění ve vztahu k repozitáři.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{repositoryUCDia.pdf}
+    \caption{Diagram UC pro repozitáře}
+    \label{fig:repositoryUC}
+\end{figure}
+
+\section{Dokumenty}
+
+Jelikož už máme definované chování pro jednotlivé repozitáře a jejich moduly, můžeme se vrhnout na návrh dokumentů, které se budou skládat z modulů. Každý
+dokument je tedy soubor modulů, který je možné převést do tisknutelné podoby. Co ale nesmíme opomenout je, že stejně jako moduly bude možné dokumenty také
+verzovat, zde to bude provedeno pomocí revizí. Každá revize bude nést informace o tom, kdo danou revizi vytvořil a také ponese všechny informace o verzích
+modulu, které jsou na danou revizi použity.
+
+Podobně jako u repozitářů i u dokumentů budeme řešit oprávnění a to stejným způsobem, tudíž každý dokument má svého zakladatele nebo také vlastníka,
+vlastník má možnost rozhodovat o tom, kdo bude moci dokument upravovat (vytvářet nové revize, měnit obsah dokumentu), a kdo bude mít možnost si pouze dokument
+přečíst.
+
+Pro lepší představu o jednotlivých případech užití je zde přiložen UC diagram pro dokumenty \ref{fig:documentUC}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{documentUCDia.pdf}
+    \caption{Diagram UC pro dokumenty}
+    \label{fig:documentUC}
+\end{figure}
+
+\section{Návrh architektury aplikace}
+
+Jak bylo již řečeno v kapitole o cílech práce, aplikace by měla být rozdělena na 2 části backend a frontend. Nyní si pojdmě
 
 \begin{figure}[h]
     \centering
