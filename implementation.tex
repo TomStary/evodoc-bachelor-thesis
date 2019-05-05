@@ -97,10 +97,30 @@ bude v rámci databáze použit. Toto se provádí protože ne všechny databáz
 
 \subsection{Kontrola příchozích dat}
 
-Jako v každém programu je potřeba kontrolovat vstupní data, je i v našem případě nutné kontrolovat data, která přijdou z našeho frontendu, nebo například z mobilní aplikace,
+Jako v každém programu je potřeba kontrolovat vstupní data, je i v našem případě nutné kontrolovat data, která přijdou z našeho\linebreak frontendu, nebo například z mobilní aplikace,
 která se bude připojovat na náš backend. Pro kontrolu dat použijeme implementaci schémat z dalšího modulu pro Python, \textit{marshmallow}. Tento modul nám umožní definovat
-nejen formát dat, ale také definuje formát výstupních dat, která budou načtena přímo z výstupu dotazu nebo objektu z \textit{SQLAlchemy}.
+nejen formát dat, ale také definuje formát výstupních dat, která budou načtena přímo z~výstupu dotazu nebo objektu z~\textit{SQLAlchemy}.
 
 \section{Frontend}
 
-Hlavní myšlenkou frontendu je přívětivé podání dat uživatelům, je důležité aby se aplikace dala jednoduše ovládat a nebyla složitá na pochopení pro nového uživatele.
+Základním stavebním kamenem frontendu je knihovna React psaná v JavaScriptu. Tato knihovna nám zajištuje základ pro vytváření webového grafického rozhraní. React rozděluje
+jednotlivé prvky z rozhraní do komponent, které se poté dají kombinovat, znovu využívat a dá se u nich definovat\linebreak rozšiřující chování. Na psaní v Reactu není potřeba psaní
+si vlastních šablon, vše je psáno přímo v JavaScriptovém kódu. \cite{reactJS} Samotný React ještě rozšíříme o~další důležité knihovny.
+
+\subsection{Redux}
+
+Tím asi nejdůležitějším rozšířením Reactu v této práci je knihovna Redux. Redux je, stejně jako React, také knihovna pro JavaScript. Jeho hlavní funkcí je
+ukládání si stavů aplikace, tudíž je možné předem nadefinovat všechny stavy, ve kterých se naše aplikace může objevit a není problém se pohybovat na časové
+díky této vlastnosti. Je dobré podotknout, že tyto stavy jsou perzistentní. Pro propojení s Reactem existuje knihovna React-Redux přímo od vývojářů Reduxu. \cite{redux}
+
+\subsection{Reactstrap}
+
+Pro frontend je táké důležité, aby všechny ovládácí prvky byly stejné a celá aplikace měla jednotný design. Reactstrap je knihovna rozšiřující React o komponenty,
+které jsou již nastylované a to za použití Bootstrap stylů. Tyto komponenty jsou poté použity v celé aplikaci a díky Bootstrapu nemusíme vytvářet vlastní styly,
+pokud si vystačíme s tím, co nám nábízí Bootstrap.
+
+\subsection{Struktura aplikace}
+
+Aby se při vytváření aplikace dalo snáze orientovat v již napsaném kódu, investujeme chvilku času do definování a vytvoření adresářové struktury. Ta nám
+pomůže jednoduše určit, kde se nacházejí jednotlivé části aplikace, je třeba dobré rozdělit části týkající se pouze Reduxu do vlastní složky, či je dobré roztřídit
+jednotlivé komponenty podle toho, které části aplikace se týkají.
