@@ -93,13 +93,32 @@ bude v rámci databáze použit. Toto se provádí protože ne všechny databáz
     \label{lst:guidImplementation}
 \end{listing}
 
-\clearpage
-
 \subsection{Kontrola příchozích dat}
 
 Jako v každém programu je potřeba kontrolovat vstupní data, je i v našem případě nutné kontrolovat data, která přijdou z našeho\linebreak frontendu, nebo například z mobilní aplikace,
 která se bude připojovat na náš backend. Pro kontrolu dat použijeme implementaci schémat z dalšího modulu pro Python, \textit{marshmallow}. Tento modul nám umožní definovat
 nejen formát dat, ale také definuje formát výstupních dat, která budou načtena přímo z~výstupu dotazu nebo objektu z~\textit{SQLAlchemy}.
+
+\subsection{Struktura backendu}
+
+Přehlednost kódu je jedna z důležitých vlastností aplikace, kterou je snadné udržovat a rozšiřovat. Tomu může i velice pomoct přehledná a intuitivní adresářová struktura.
+V rámci backendu máme ještě možnost rozdělit si tuto strukturu podle jednotlivých vrstev, které se v naší aplikaci objevují. Například databázové modely mohou být ve vlastní složce,
+nebo všechny \gls{api} metody lze přesunout do jedné složky a rozdělit do souborů, podle toho, k jaké entitě se dané metody vážou.
+
+\begin{listing}[H]
+    \dirtree{%
+        .1 migrations\DTcomment{složka s migracemi databáze}.
+        .1 moddoc.
+        .2 api\DTcomment{složka obahující všechny \gls{api} metody}.
+        .2 dto\DTcomment{objekty pro přesun informací mezi databází a uživatelem}.
+        .2 model\DTcomment{entity}.
+        .2 seed\DTcomment{obsahuje základní set dat pro databázi}.
+        .2 service\DTcomment{pomocné služby}.
+        .2 \_\_init\_\_.py\DTcomment{základní soubor, obsahuje vytvoření instance Flasku}.
+        .2 utils.py\DTcomment{utility použiváné v aplikaci}.
+    }
+\end{listing}
+
 
 \section{Frontend}
 
@@ -121,6 +140,22 @@ pokud si vystačíme s tím, co nám nábízí Bootstrap.
 
 \subsection{Struktura aplikace}
 
-Aby se při vytváření aplikace dalo snáze orientovat v již napsaném kódu, investujeme chvilku času do definování a vytvoření adresářové struktury. Ta nám
+Aby se při vytváření aplikace dalo snáze orientovat v již napsaném kódu, investujeme chvilku času do definování a vytvoření adresářové struktury \ref{dir:frontStruct}. Ta nám
 pomůže jednoduše určit, kde se nacházejí jednotlivé části aplikace, je třeba dobré rozdělit části týkající se pouze Reduxu do vlastní složky, či je dobré roztřídit
 jednotlivé komponenty podle toho, které části aplikace se týkají.
+
+\begin{listing}[H]
+    \dirtree{%
+        .1 public\DTcomment{složka obsahující HTML s výsledným JavaScriptem}.
+        .1 src.
+        .2 \_actions\DTcomment{zde se nacházejí všechny akce volané z komponent}.
+        .2 \_components\DTcomment{pomocné komponenty}.
+        .2 \_constants\DTcomment{konstanty využivané v Reduxu}.
+        .2 \_helpers\DTcomment{pomocné funkce a třídy}.
+        .2 \_reducers\DTcomment{Redux reducers}.
+        .2 \_store\DTcomment{Redux store}.
+        .2 App\DTcomment{základní komponenta}.
+    }
+    \caption{Adresářová struktura frontendové aplikace}
+    \label{dir:frontStruct}
+\end{listing}
