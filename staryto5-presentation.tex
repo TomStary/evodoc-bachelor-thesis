@@ -1,0 +1,120 @@
+% arara: xelatex: {options: [-output-directory=build, --shell-escape]}
+
+\documentclass[czech,aspectratio=169]{beamer}
+
+\usepackage{polyglossia}
+\setmainlanguage{czech}
+\usepackage{ulem}
+\usepackage{relsize}
+\usepackage{xspace}
+\newcommand{\Rplus}{\protect\hspace{-.1em}\protect\raisebox{.35ex}{\smaller{\smaller\textbf{+}}}}
+\newcommand{\Cpp}{\mbox{C\Rplus\Rplus}\xspace}
+
+% nastavení vzhledu
+% další možnosti vzhledu viz https://hartwork.org/beamer-theme-matrix/
+\usetheme{Boadilla}
+\usecolortheme{dove}
+
+% vzhled slajdů vnitřní téma (např. vzhled odrážek)
+\useinnertheme{circles} %možnosti: default circles rectangles rounded inmargin
+% vzhled slajdů vnější téma
+\useoutertheme{default} %možnosti: default, miniframes, smoothbars, sidebar, split, shadow, tree, smoothtree, infolines
+
+% zavedeme čvutí modou barvu
+\definecolor{CVUT}{HTML}{0065BD}
+% čvutí modou použijeme jako hlavní barvu prezentace
+\setbeamercolor{structure}{bg=white,fg=CVUT}
+
+% jako font prezentace nadefinujeme oficiální ČVUT písmo Technika
+% https://www.cvut.cz/logo-a-graficky-manual  -- inforek, příhlášení přes celoškolské heslo
+%\usepackage{fontspec}
+%\setsansfont{Technika-Kniha}
+
+% vypneme navigační panel beamer (pro zapnutí zakomentujeme)
+\beamertemplatenavigationsymbolsempty{}
+
+% vygenerujeme slajdy s poznámkami
+%\setbeameroption{show notes}
+
+% vygeneruje slajdy s poznámky vhodné pro promítání na dvou monitorech
+%\usepackage{pgfpages}
+%\setbeameroption{show notes on second screen}
+
+% další balíčky
+\usepackage[outputdir=build]{minted}
+\usepackage{hyperref}
+\usepackage{tikz}
+
+% Údaje o prezentaci
+\title[Systém pro tvorbu a správu evolvabilních dokumentů]{Systém pro tvorbu a správu evolvabilních dokumentů}
+\subtitle{Bakalářská práce}
+\institute[FIT ČVUT v Praze]{Fakulta informačních technologií \\ České vysoké učení technické v Praze}
+\author[T. Starý]{Tomáš Starý \\ Vedoucí práce: Ing. Marek Suchánek}
+\date{3. 5. 2019}
+\titlegraphic{\includegraphics[width=.1\textwidth]{logo-cvut}}
+
+
+\begin{document}
+
+\begin{frame}
+    \titlepage{} %generuje se automaticky z section, subsection, subsubsection
+    \note{Nezapomenout pozdravit}
+\end{frame}
+
+\begin{frame}
+    \tableofcontents
+\end{frame}
+
+\section{Motivace}
+    \begin{frame}
+        \tableofcontents[currentsection]
+    \end{frame}
+    \begin{frame}{Modulární dokumenty}
+        \begin{itemize}
+            \item rozdělení textu na moduly \pause{}
+            \item sdílení modulů \pause{}
+            \item snažší správa
+        \end{itemize}
+    \end{frame}
+
+\section{Nástroje pro tvorbu dokumentů}
+    \begin{frame}
+        \tableofcontents[currentsection]
+    \end{frame}
+    \begin{frame}{Markdown}
+        \begin{itemize}
+            \item značkovací jazyk \pause{}
+            \item GitHub, GitLab i Bitbucket \pause{}
+            \item neumožňuje modularitu
+        \end{itemize}
+    \end{frame}
+    \begin{frame}{reStructuredText}
+        \begin{itemize}
+            \item dokumentační nástroj \pause{}
+            \item Python \pause{}
+            \item umožnuje modularitu \pause{}
+            \item .. include::
+        \end{itemize}
+    \end{frame}
+    \begin{frame}{AsciiDoc}
+        \begin{itemize}
+            \item původně psaný pro Python \pause{}
+            \item nyní v jazyce Ruby \pause{}
+            \item jako reStructuredText podporuje modularitu \pause{}
+            \item include::
+        \end{itemize}
+    \end{frame}
+
+\section{Aplikace}
+    \begin{frame}
+        \tableofcontents[currentsection]
+    \end{frame}
+    \begin{frame}{Nárvh}
+        \begin{itemize}
+            \item uživatelská sekce \pause{}
+            \item repozitáře \pause{}
+            \item dokuemnty
+        \end{itemize}
+    \end{frame}
+
+\end{document}

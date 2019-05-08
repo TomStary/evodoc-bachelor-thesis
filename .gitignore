@@ -246,3 +246,5 @@ staryto5-bachelor-thesis.pdf
 
 # MacOS filesystem files
 .DS_Store
+build
+.vscode
