@@ -1,4 +1,5 @@
 % arara: xelatex: {options: [-output-directory=build, --shell-escape]}
+% arara: xelatex: {options: [-output-directory=build, --shell-escape]}
 
 \documentclass[czech,aspectratio=169]{beamer}
 
@@ -50,7 +51,7 @@
 \subtitle{Bakalářská práce}
 \institute[FIT ČVUT v Praze]{Fakulta informačních technologií \\ České vysoké učení technické v Praze}
 \author[T. Starý]{Tomáš Starý \\ Vedoucí práce: Ing. Marek Suchánek}
-\date{3. 5. 2019}
+\date{7. 5. 2019}
 \titlegraphic{\includegraphics[width=.1\textwidth]{logo-cvut}}
 
 
@@ -115,6 +116,36 @@
             \item repozitáře \pause{}
             \item dokuemnty
         \end{itemize}
+    \end{frame}
+    \begin{frame}{Implementace}
+        \begin{itemize}
+            \item backend \pause{}
+            \begin{itemize}
+                \item Python
+                \item Flask
+                \item Pandoc
+            \end{itemize}
+            \item frontend \pause{}
+            \begin{itemize}
+                \item JavaScript
+                \item React
+                \item Redux
+            \end{itemize}
+        \end{itemize}
+    \end{frame}
+
+\section{Závěr}
+    \begin{frame}
+        \tableofcontents[currentsection]
+    \end{frame}
+    \begin{frame}{Naplnění cílů}
+        \begin{itemize}
+            \item analýza tvorby dokumentů \pause{} - splněno
+            \item analýza násztojů pro tvorbu dokumentů \pause{} - splněno
+            \item návrh řešení systému pro správu dokumentů \pause{} - splněno
+            \item implementace takového systému \pause{} - splněno
+        \end{itemize}
+        \vfill{Děkuji za pozornost.}
     \end{frame}
 
 \end{document}
