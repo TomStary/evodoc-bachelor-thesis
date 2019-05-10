@@ -1,0 +1,81 @@
+\section{Testování backend části}
+
+Na backendu je potřeba otestovat hlavně jeho \gls{rest} \gls{api} metody, které se používají ke komunikaci. Pro jednoduché
+testování v rámci vývoje aplikace bylo využito nástroje Postman \cite{postmanSW}, tento nástroj lze v základní verzi použít
+zdarma. Nástroj slouží k definování \gls{http} dotazů, má možnosti definování různých parametrů a v rámci jednoho účtu umí sdílet
+uložené dotazy mezi zařízeními. Postman nabízí možnost testování dotazů, této možnosti ovšem nevyužijeme, na výsledné testování
+využijeme modulu \textit{pytest} v rámci jazyka Python.
+
+Než napíšeme první test v \textit{pytest}, je potřeba nastavit takzavené \textit{test fixtures}, \textit{test fixture} je základní část
+textu, která je pro všechny testy stejné, test fixture například představuje připojení k databázi, nebo může posloužit k načtení
+celé aplikace v rámci integračních testů. Zde je menší ukázka jak v naší aplikaci vypadá taková \textit{test fixtures} \ref{lst:testFixture}.
+
+\begin{listing}[H]
+    \begin{minted}[linenos,breaklines]{python}
+# Ukázka z test/conftest.py
+import pytest
+
+from moddoc import create_app
+
+
+@pytest.fixture(scope='session')
+def app():
+    """
+    Creates instance of application with test configuration for each test session
+    """
+    app = create_app('test')
+
+    # register our blueprints
+    with app.app_context():
+        app.init_api()
+
+    # return generator for app
+    yield app
+    \end{minted}
+    \caption{Ukázka test fixture}
+    \label{lst:testFixture}
+\end{listing}
+
+Pro testování backendu bude použito integrování testování, kdy budeme testovat správné odpovědi na jednotlivé \gls{http} dotazy z našeho
+testovacího prostředí. Před samotným dotazem provedeme patřičné nasazení dat, na kterých provedeme testování naší odpovědi. Tato metoda
+testování se nazývá integritní testování, kdy se provádí test celého funkčního celku, tedy existuje připojení na databázi, exituje testovací
+klient, který se připojuje na testovací server. Zde je ukázka takového testu na příkladu s testem přihlášení \ref{lst:authTest}. V této ukázce
+je vidět volání funkce \texttt{test\_login}, parametry této funkce jsou \textit{test fixtures}, první je náš testovací klient, který umí odeslat
+\gls{http} dotaz na backend, druhým je připojení k testovací databázi, díky tomu můžeme přími vkládat data do databáze, díky tomu také máme
+možnost kontrolovat správnost dat přímo v databázi a zajistit tak správnost výsledku.
+
+\begin{listing}[H]
+    \begin{minted}[linenos,breaklines]{python}
+# ukázka t test_auth.py
+from moddoc.model import User
+
+
+def test_login(client, db):
+    # prepare data
+    username = 'test'
+    password = 'SuperSecret1'
+    user = User(username=username, email='test@example.com', password=password)
+    db.session.add(user)
+    db.session.commit()
+
+    # create data
+    data = {'username': username, 'password': password}
+
+    # get server response
+    response = client.post('auth/login', json=data)
+
+    assert response.status_code == 200
+    assert response.get_json()['access_token'] is not None
+    \end{minted}
+    \caption{Integritní test příhlášení}
+    \label{lst:authTest}
+\end{listing}
+
+Díky těmto testům můžeme snadno a rychle pokrýt celou funkcionalitu backendu, a můžeme zaručit správné zpracování dat ze strany backendu.
+Ovšem tato metoda testování nám v případě chyby v některé z části kódu neukáže hned přesné místo, kde problém vznikl, s tím by nám pomohli
+unit testy, neboli testy jednotlivých funkcí. Tyto testy se vyznačují tím, že testují pouze danou funkci či metodu. Pokud se v testované funkci
+vyskytuje volání další funkce je třeba toto volání takzvaně \textit{mockovat}. \textit{Mockování} je nahrazování původního volání novým voláním,
+lze takto nahradit například komunikaci s databází, která by v rámci unit testů neměla být využita.
+
+\section{Testování frontend části}
+

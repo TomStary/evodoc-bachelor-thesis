@@ -14,26 +14,26 @@ Pro další funkcnionality\linebreak využíváme v mnoha případech moduly, kt
 V rámci ověřovaní uživatelů musíme zajistit zabezpečenou komunikaci mezi backendem a frontendem. Toho docílíme sdílením tokenu, který bude ověřovat
 každý dotaz do té části aplikace, kam mají přístup pouze přihlášení uživatelé. Toho docílíme pomocí modulu, který rožšiřujeme Flask,
 \textit{Flask-jwt-extended}. Pro správnou funkci tohoto modulu je třeba mít nastavený tajný klíč pro aplikaci, který slouží k šifrování \gls{jwt},
-ve kterém se nachází identifikátor uživatele. Dále je potřeba definovat funkce pro načítání uživatele a jeho rolí, toto bude poté použito pro kontrolu
+ve kterém se nachází identifikátor uživatele. Dále je potřeba definovat funkce pro načítání uživatele a jeho rolí, toto poté použijeme pro kontrolu
 oprávnění uživatele a získávání dat, která jsou vázána na uživatele, zde je ukázka \ref{lst:flaskJWTCode}.
 
 \begin{listing}
     \begin{minted}{python}
-        # File: moddoc/service/auth_service.py
+# File: moddoc/service/auth_service.py
 
-        @app.jwt.user_claims_loader
-        def add_claims(user):
-            """
-            Load claims into JWT
-            """
-            return {'roles': user['roles']}
+@app.jwt.user_claims_loader
+def add_claims(user):
+    """
+    Load claims into JWT
+    """
+    return {'roles': user['roles']}
 
-        @app.jwt.user_identity_loader
-        def load_user(user):
-            """
-            Function for loading user
-            """
-            return user
+@app.jwt.user_identity_loader
+def load_user(user):
+    """
+    Function for loading user
+    """
+    return user
     \end{minted}
     \caption{Ukázka kódu pro \textit{Flask-jwt-extended}}
     \label{lst:flaskJWTCode}
@@ -45,49 +45,49 @@ Na toto použijeme další rozšíření pro \textit{Flask} a to konkrétně \te
 Podporuje většinu \gls{sql} implementací a serverů. V našem případě budeme brát \textit{postgresql} jako nejvhodnější jazyk a databázový server se zaručenou podporou pro \textit{sqlite}. Protože
 v aplikaci používáme jako identifikátor všech modelů používáme \gls{guid}, základní implementace \textit{SQLAlchemy} nám ovšem tento datový typ nativně nepodporuje, stejně jako
 některé \gls{sql} servery. Proto si vytvoříme vlastní datový typ \gls{guid}, ukázku jak na to nalezeme i v oficiální dokumentaci \textit{SQLAlchemy} \cite{sqlalchemyGuid}. Jak lze
-vidět v ukázce kódu \ref{lst:guidImplementation}, při vytváření tohoto typu je provedena kontrola, na s jakou databází bude aplikace pracovat a podle toho se rozhodne jaký datový typ
+vidět v ukázce kódu \ref{lst:guidImplementation}, při vytváření tohoto typu je provedena kontrola, s jakou databází bude aplikace pracovat a podle toho se rozhodne jaký datový typ
 bude v rámci databáze použit. Toto se provádí protože ne všechny databáze si umí poradit s GUID datovým formátem.
 
 \begin{listing}
     \begin{minted}{python}
-        from sqlalchemy.types import TypeDecorator, CHAR
-        from sqlalchemy.dialects.postgresql import UUID
-        import uuid
+from sqlalchemy.types import TypeDecorator, CHAR
+from sqlalchemy.dialects.postgresql import UUID
+import uuid
 
-        class GUID(TypeDecorator):
-            """Platform-independent GUID type.
+class GUID(TypeDecorator):
+"""Platform-independent GUID type.
 
-            Uses PostgreSQL's UUID type, otherwise uses
-            CHAR(32), storing as stringified hex values.
+Uses PostgreSQL's UUID type, otherwise uses
+CHAR(32), storing as stringified hex values.
 
-            """
-            impl = CHAR
+"""
+impl = CHAR
 
-            def load_dialect_impl(self, dialect):
-                if dialect.name == 'postgresql':
-                    return dialect.type_descriptor(UUID())
-                else:
-                    return dialect.type_descriptor(CHAR(32))
+def load_dialect_impl(self, dialect):
+    if dialect.name == 'postgresql':
+        return dialect.type_descriptor(UUID())
+    else:
+        return dialect.type_descriptor(CHAR(32))
 
-            def process_bind_param(self, value, dialect):
-                if value is None:
-                    return value
-                elif dialect.name == 'postgresql':
-                    return str(value)
-                else:
-                    if not isinstance(value, uuid.UUID):
-                        return "%.32x" % uuid.UUID(value).int
-                    else:
-                        # hexstring
-                        return "%.32x" % value.int
+def process_bind_param(self, value, dialect):
+    if value is None:
+        return value
+    elif dialect.name == 'postgresql':
+        return str(value)
+    else:
+        if not isinstance(value, uuid.UUID):
+            return "%.32x" % uuid.UUID(value).int
+        else:
+            # hexstring
+            return "%.32x" % value.int
 
-            def process_result_value(self, value, dialect):
-                if value is None:
-                    return value
-                else:
-                    if not isinstance(value, uuid.UUID):
-                        value = uuid.UUID(value)
-                    return value
+def process_result_value(self, value, dialect):
+    if value is None:
+        return value
+    else:
+        if not isinstance(value, uuid.UUID):
+            value = uuid.UUID(value)
+        return value
     \end{minted}
     \caption{Implementace GUID datového typu}
     \label{lst:guidImplementation}
@@ -107,6 +107,7 @@ nebo všechny \gls{api} metody lze přesunout do jedné složky a rozdělit do s
 
 \begin{listing}[H]
     \dirtree{%
+        .1 instance\DTcomment{složka s konfigurací, jedná se pouze o lokální složku}.
         .1 migrations\DTcomment{složka s migracemi databáze}.
         .1 moddoc.
         .2 api\DTcomment{složka obahující všechny \gls{api} metody}.

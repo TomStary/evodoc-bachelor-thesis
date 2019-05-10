@@ -79,22 +79,22 @@
 \newglossaryentry{xml}
 {
 	name=XML,
-	description={Extensible Markup Language}
+	description={Extensible Markup Language, jazyk použivající se například pro serializaci dat, hojné zastoupení má v internetové komunikaci}
 }
 \newglossaryentry{html}
 {
 	name=HTML,
-	description={HyperText Markup Language}
+	description={HyperText Markup Language je značkovací jazyk používaný pro většinu webových stránek}
 }
 \newglossaryentry{pdf}
 {
 	name=PDF,
-	description={Portable Document Format}
+	description={Portable Document Format, formát pro přenášení dokumentů mezi zařízeními}
 }
 \newglossaryentry{jwt}
 {
 	name=JWT,
-	description={JSON Web Token}
+	description={JSON Web Token jedná se o přístupová data ve formátu JSON dle specifikace v RFC 7519}
 }
 \newglossaryentry{orm}
 {
@@ -110,23 +110,28 @@
 {
 	name=GDPR,
 	description={General Data Protection Regulation v překladu obecné nařízení o ochraně osobních údajů, jedná se legislativu EU, kterou přijala i Česká
-	republika. GDPR částečně přepisuje původní znění zákona o ochraně osobních údajů z roku 2000.}
+	republika. GDPR částečně přepisuje původní znění zákona o ochraně osobních údajů z roku 2000}
 }
 \newglossaryentry{sql}
 {
 	name=SQL,
-	description={Structured Query Language, neboli strukturovaný dotazovací jazyk, využívá se v rámci relačních databází k získávání dat.}
+	description={Structured Query Language, neboli strukturovaný dotazovací jazyk, využívá se v rámci relačních databází k získávání dat}
 }
 \newglossaryentry{vcs}
 {
 	name=VCS,
 	description={VCS je zkratkou pro version control systém, což v překladu znamená verzovací systém. Tyto systémy se používájí pro sledování změn
-	mezi jednotlivými úpravami souborů.}
+	mezi jednotlivými úpravami souborů}
 }
 \newglossaryentry{rest}
 {
 	name=REST,
 	description={Representational State Transfer, jedná se o architekturu, která slouží k vytvoření, čtení, uprávě nebo smazání dat ze serveru pomocí HTTP volání}
+}
+\newglossaryentry{http}
+{
+	name=HTTP,
+	description={HyperText Transfer Protocol je internetový protokol používající se pro komunikaci s webovými servery}
 }
 \newglossaryentry{api}
 {
@@ -159,10 +164,12 @@
 \chapter{Realizace}
 \input{implementation}
 
+\chapter{Testování a nasazení}
+\input{testing}
+
 \begin{conclusion}
 	\input{conclusion}
 \end{conclusion}
-\listoftodos
 \printbibliography
 \appendix
 
