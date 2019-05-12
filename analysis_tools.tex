@@ -7,6 +7,7 @@ konečné podoby, stačí nám k tomu volně dostupné nástroje, které jsou ve
 Mezi značkovací jazyky například patří i jazyky používané při\linebreak psaní webových stránek, jako je \gls{html} či \gls{xml}, ovšem tyto jazyky budeme spíše využívat pro zobrazování výstupu
 jednodušších značkovacích jazyků. My se budeme hlavně zabývat těmito 3 jazyky: Markdown, reStructuredText a AsciiDoc. Tyto jazyky se používají pro psaní dokumentace v jednotlivých programech
 (docutil, AsciiDoc) či slouží k vytváření uživatelských návodů (Markdown).
+
 \clearpage
 
 \section{Markdown}
@@ -25,6 +26,13 @@ Takto vypadá menší ukázka Markdown syntaxe \ref{lst:markdown} a také výsle
     \caption{Příklad Markdown syntaxe}
     \label{lst:markdown}
 \end{listing}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{example.pdf}
+    \caption{Výstup Markdown}
+    \label{fig:markdown}
+\end{figure}
 
 \clearpage
 
@@ -48,6 +56,13 @@ Stejně jako u Markdown, zde máme ukázku syntaxe \ref{lst:rst} i výsledného 
     \caption{Příklad reStructuredText syntaxe}
     \label{lst:rst}
 \end{listing}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{example-rst.pdf}
+    \caption{Výstup reStructuredText}
+    \label{fig:rstOutput}
+\end{figure}
 
 \clearpage
 
@@ -74,12 +89,19 @@ Asciidoctor.convert_file 'example.adoc', to_file: true, safe: :safe
     \label{lst:asciiDoc}
 \end{listing}
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{example-ascii.pdf}
+    \caption{Výstup AsciiDoc}
+    \label{fig:asciiOutput}
+\end{figure}
+
 \clearpage
 
 \section{Porovnání}
 
 Po představení těchto 3 jazyků je nyní na čase porovnat je, zhodnotit jejich použitelnost pro modulární dokumenty a vybrat si, který použijeme v rámci naší aplikace.
-V rámci porovnání musíme dát hlavně důraz na podporu modularity v rámci jazyka, tedy jestli je už v samostatném značkovacím jazyku podpořeno vkládání dalších
+V~rámci porovnání musíme dát hlavně důraz na podporu modularity v~rámci jazyka, tedy jestli je už v samostatném značkovacím jazyku podpořeno vkládání dalších
 souborů s textem, tedy modulů. Dále se také zaměříme na jednoduchost generování různých formátů, některé jazyky jsou podpořeny v Pandocu a pokud jsou, do jakých
 formátů je lze převést.
 
@@ -87,11 +109,11 @@ Prvně začněme s jazykem Markdown, jeho představení už máme za sebou a nyn
 Markdown nepodporuje přímé vkládání dalších souborů, tento nedostatek jej činí, oproti ostatním 2 jazykům, nepoužitelným pro modulární dokumenty. Je zde sice možná úprava
 kódu, který by text obohatil o moduly před výsledním zpracováním, ale tato úprava by byla náročná na provedí v takovém rozsahu, abychom mohli zaručit její bezchybnost.
 
-Dalším na řadě je reStructuredText, tento jazyk má možnost vkládat v rámci jednoho souboru i další soubory, které obashují další kód, díky této vlastnosti
-lze u něho použít modulární přístup k vytváření dokumentů bez žádného předzpracování textu. Tento jazyk je podporován v rámci Pandocu \cite{pandocSW} a je možné
+Dalším na řadě je reStructuredText, tento jazyk má možnost vkládat v~rámci jednoho souboru i další soubory, které obashují další kód, díky této vlastnosti
+lze u něho použít modulární přístup k vytváření dokumentů bez žádného předzpracování textu. Tento jazyk je podporován v~rámci Pandocu \cite{pandocSW} a je možné
 jej převest nejenom do formátu \gls{pdf}, ale i spousty další, jmenovitě například: Markdown, EPUB (formát pro čtečky knih) či již zmíněné \gls{pdf}.
 
-AsciiDoc je poslední jazyk na porovnání, stejně jako reStructuredText, nám i AsciiDoc nabízí možnost připojení dalších souborů, které budou převedeny na výsledný dokument.
+AsciiDoc je poslední jazyk na porovnání, stejně jako reStructuredText, nám i AsciiDoc nabízí možnost připojení dalších souborů, které budou převe\-deny na výsledný dokument.
 Protože je ovšem již podporován pouze v jazyce Ruby, budeme potřebovat na jeho převod do výsledných formátů instalovat jednotlivé moduly pro tento jazyk. Bohužel nelze
 vyzužít Pandoc, neboť tuto verzi AsciiDocu již nepodporuje. Použijeme tedy nástroj AsciiDoctor \cite{asciiDoctorSW}, tento nástroj nám výsledný dokument umí převést do
 formátu \gls{html}, pro převod do jiných formátů jako například \gls{pdf} je nutné mít kromě AsciiDoctor nainstalováno i jeho rozšíření asciidoctor-pdf \cite{asciidoctorpdfSW}.
@@ -103,23 +125,19 @@ Na závěr tohoto porovnání je třeba uvést jaký jazyk budeme v naší aplik
     \item Druhým důvodem je autorova předešlá zkušenost v jazyce Python a také zkušenosti s nástojem Pandoc a modulem pypandoc.
 \end{enumerate}
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\textwidth]{example.pdf}
-    \caption{Výstup Markdown}
-    \label{fig:markdown}
-\end{figure}
+\section{Požadavky na systém}
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\textwidth]{example-rst.pdf}
-    \caption{Výstup reStructuredText}
-    \label{fig:rstOutput}
-\end{figure}
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\textwidth]{example-ascii.pdf}
-    \caption{Výstup AsciiDoc}
-    \label{fig:asciiOutput}
-\end{figure}
+Na závěr celé analýzy a na základě požadavků na práci stanovme tyto funkční:
+\begin{itemize}
+    \item správa modulů, možnost jejich úpravy či smazání
+    \item generování dokumentů
+    \item verzování dokumentů i modulů
+    \item modularita aplikace
+    \item rozšiřitelnost aplikace
+\end{itemize}
+a také tyto nefunkční požadavky:
+\begin{itemize}
+    \item správa uživatelů, možnost jejich registrování a přihlášení
+    \item oprávnění pro dokumenty i moduly
+    \item rozdělení aplikace na backend a frontend.
+\end{itemize}

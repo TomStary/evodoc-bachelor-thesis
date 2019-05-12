@@ -18,6 +18,20 @@ dostáváme k nutnosti myslet na ochranu osobních údajů, která prošla v pos
 V tomto UC diagramu \ref{fig:userUCDiagram} naleznete rozpis všech UC, které se týkají uživatelské sekce. Zároveň k tomu je zde také stavový diagram \ref{fig:userFlow},
 který nám ukazuje jednotlivé stavy uživatele, vzhledem k systému a které akce mají vliv na jeho stav.
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{lifecycle.pdf}
+    \caption{Diagram přihlášení a registrace uživatele}
+    \label{fig:userFlow}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{userUCDiagram.pdf}
+    \caption{Diagram UC pro uživatelskou sekci}
+    \label{fig:userUCDiagram}
+\end{figure}
+
 \subsection{\gls{gdpr}}
 
 Naše aplikace bude pracovat s osobními údaji, je nutné toto brát na~vědomí, proto se nyní podívejme na to, co musí naše aplikace splňovat, aby dodržela všechny
@@ -25,20 +39,6 @@ zákony o ochraně osobních údají a směrnice Evropské unie, \gls{gdpr}. Prv
 účel oprávněný. V tomto případě o uživateli získáme osobní údaj v podobě emailu, který stačí k identifikaci určité osoby. V našem případě je email identifikátor uživatele
 a budeme jej při registraci žádat o souhlas se zpracováním osobních údajů. Dále musíme myslet na možnost smazání či anonymizace údajů uživatele. Toho docílíme ručními
 zásahy do databáze, kde využijeme možnosti změnit email na jeho hash. \cite{gdpr}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\textwidth]{userUCDiagram.pdf}
-    \caption{Diagram UC pro uživatelskou sekci}
-    \label{fig:userUCDiagram}
-\end{figure}
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\textwidth]{lifecycle.pdf}
-    \caption{Diagram přihlášení a registrace uživatele}
-    \label{fig:userFlow}
-\end{figure}
 
 \section{Repozitáře}
 
@@ -98,6 +98,14 @@ poslouží k udržení identity po přihlášení. Na tomoto diagramu \ref{fig:s
     \caption{Diagram komponent}
     \label{fig:softCompDia}
 \end{figure}
+
+\section{Možnosti rozšíření}
+
+Protože každý systém se postupně rozvíjí a rozšiřuje, musíme na tuto skutečnost myslet již při návrhu, snažíme se tedy, aby jednotlivé části systému byly od sebe
+oddělené a mohli fungovat i bez ostatních částí. Například propojení mezi moduly a uživateli je pouze na základě jedné vazební tabulky, která slouží k dekompozici vztahu
+M:N. U modulů je také podstatné, aby bylo možné jim v dalším vývoji přidat další atributy jako například typ modulu, toho docílíme tím, že moduly budou samostatnou tabulkou v databázi
+a bude ji tedy možné rožšířit o další atributy, při této úpravě ovšem neohrozíme již původní data a nebude pro nás tedy takovou změnu implementovat. Podobně je tomu i u~dokumentů a uživatelů
+modely se snažíme dělat co nejmenší s jednoduchou možností rozšíření viz \ref{fig:moduleDia}.
 
 \begin{figure}[h]
     \centering

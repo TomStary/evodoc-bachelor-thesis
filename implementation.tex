@@ -4,10 +4,19 @@ je zodpovědné za komunikaci s backendem a také bude zpostředkovávat zobraze
 
 \section{Backend}
 
-Jako základ backendu máme Flask, \uv{což je mikroframework pro Python\linebreak založený na Werkzeug, Jinja 2 a dobrých záměrů.} \cite{flaskDoc}
-Tento mikroframework nabízí vytváření stránek ve formátu \gls{html}, toto ovšem nebude třeba, \mbox{neboť} celý backend je složen pouze z \gls{rest} metod,
-které slouží k získání či úpravě dat. Konkrétně použijeme HTTP metody GET, POST a DELETE, které provedou určitou akci na základě volané adresy.
-Pro další funkcnionality\linebreak využíváme v mnoha případech moduly, které rozšižují základní Flask.
+V analýze nástrojů, jsme v samotném závěru porovnávali a také vybírali, jaký značkovací jazyk použijeme jako formát pro naše dokumenty.
+Při výčtu výhod pro jazyk reStructuredText, je uvedena autorova předešlá zkušenost s~jazykem Python, tento jazyk se tedy stane jazykem,
+který budeme používat při vývoji backendové části naší aplikace.
+Dalším důvodem pro výběr tohoto jazyka je modul \textit{pypandoc},
+který nám umožňuje převádění reStructuredText na jiné formáty a díky tomuto modulu budeme moci jednoduše generovat naše dokumenty. Mezi jazyky
+Python a Ruby nejsou velké rozdíly, oba jsou skriptovací jazyky. Ruby je většinou vnímán pouze jako jazyk na vytváření webových stránek, na druhé straně
+Python se snaží zaměřit na univerzálnost jeho použití. \cite{pythonRubyFight}
+
+Jako základ backendu využijeme \textit{Flask}, \uv{což je mikroframework pro Python založený na Werkzeug, Jinja 2 a dobrých záměrů.} \cite{flaskDoc}
+Tento mikroframework nabízí vytváření stránek ve formátu \gls{html}, toto ovšem \mbox{nebude} třeba, \mbox{neboť} celý backend je složen pouze z \gls{rest} metod,
+které slouží k~získání či úpravě dat. Konkrétně použijeme \gls{http} metody GET, POST a DELETE, které provedou určitou akci na základě volané adresy.
+Pro další funkcnionality využíváme v mnoha případech moduly, které rozšižují základní \textit{Flask}. Důvodem pro výběr tohoto frameworku
+je jeho snadná rozšiřitelnost pomocí modulů, také nám umožňuje vytvořit jednoduchou webovou aplikaci bez\linebreak zbytečných částí, které by nebyly použity.
 
 \subsection{Ověřování uživatele}
 
@@ -18,7 +27,7 @@ ve kterém se nachází identifikátor uživatele. Dále je potřeba definovat f
 oprávnění uživatele a získávání dat, která jsou vázána na uživatele, zde je ukázka \ref{lst:flaskJWTCode}.
 
 \begin{listing}
-    \begin{minted}{python}
+    \begin{minted}[linenos,breaklines]{python}
 # File: moddoc/service/auth_service.py
 
 @app.jwt.user_claims_loader
@@ -49,7 +58,7 @@ vidět v ukázce kódu \ref{lst:guidImplementation}, při vytváření tohoto ty
 bude v rámci databáze použit. Toto se provádí protože ne všechny databáze si umí poradit s GUID datovým formátem.
 
 \begin{listing}
-    \begin{minted}{python}
+    \begin{minted}[linenos,breaklines]{python}
 from sqlalchemy.types import TypeDecorator, CHAR
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
@@ -95,9 +104,21 @@ def process_result_value(self, value, dialect):
 
 \subsection{Kontrola příchozích dat}
 
-Jako v každém programu je potřeba kontrolovat vstupní data, je i v našem případě nutné kontrolovat data, která přijdou z našeho\linebreak frontendu, nebo například z mobilní aplikace,
+Jako v každém programu je potřeba kontrolovat vstupní data, je i v našem případě nutné kontrolovat data, která přijdou z našeho frontendu, nebo\linebreak například z mobilní aplikace,
 která se bude připojovat na náš backend. Pro kontrolu dat použijeme implementaci schémat z dalšího modulu pro Python, \textit{marshmallow}. Tento modul nám umožní definovat
 nejen formát dat, ale také definuje formát výstupních dat, která budou načtena přímo z~výstupu dotazu nebo objektu z~\textit{SQLAlchemy}.
+
+\subsection{Generování dokumentů}
+
+Asi nejdůležitější částí je generování samotných dokumentů. Jak již bylo v textu této práce zmíněno, bude využit software Pandoc \cite{pandocSW}, abychom mohli s tímto softwarem
+komunikovat, využijeme modul \textit{pypandoc}, který nám poskytne \gls{api} rozhraní pro komunikaci s Pandoc. Pro vytvoření našeho dokumenty již máme skoro vše potřebné, nyní
+je potřeba pouze zajistit zdrojové soubory, ze kterých by se mohl výsledný dokument skládat. Protože si u každého dokumentu pamatujeme, jaké repozitáře jsou použity, můžeme
+tyto repozitáře projít a pro každý modul v nich obsažený vytvořit soubor, který bude obsahovat data z modulu. Název takového souboru se pak bude určovat podle identifikátoru
+z databáze pro tento modul. Pokud bude v dokumentu použit odkaz na tento identifikátor bude zaručeno, že dokument bude generován vždy s nejnovější verzí modulu. Pro generování
+dokumentu se specifickou verzí modulu, je třeba uvést jako odkaz identifikátor této verze. Před každým generování dokumentu se nejdříve vytvoří všechny potřebné soubory z modulů,
+které mohou být použity v dokumentu a poté se už provede samotné generování dokumentu, který je poté vrácen skrze \gls{api}.
+
+\clearpage
 
 \subsection{Struktura backendu}
 
@@ -123,21 +144,81 @@ nebo všechny \gls{api} metody lze přesunout do jedné složky a rozdělit do s
 
 \section{Frontend}
 
-Základním stavebním kamenem frontendu je knihovna React psaná v JavaScriptu. Tato knihovna nám zajištuje základ pro vytváření webového grafického rozhraní. React rozděluje
-jednotlivé prvky z rozhraní do komponent, které se poté dají kombinovat, znovu využívat a dá se u nich definovat\linebreak rozšiřující chování. Na psaní v Reactu není potřeba psaní
-si vlastních šablon, vše je psáno přímo v JavaScriptovém kódu. \cite{reactJS} Samotný React ještě rozšíříme o~další důležité knihovny.
+Jako jazyk, ve kterém budeme vyvíjet frontend, volíme JavaScript, který je podporován všemi webovými prohlížeči a umožňujeme nám vytvářet aplikace
+přímo v něm. Další jeho přednosti jsou jednoduchost implementace, efektivita a bezpečnost. S popularitou tohoto jazyka roste počet framewroků a knihoven,
+které lze použít pro vytváření webových aplikací. Dnes mezi nejznámější patří \textit{VueJS}, \textit{React} a \textit{Angular}. Pouze \textit{Angular} je ovšem plnohodnotný framework, zbylé
+2 jsou pouze knihovnami. \cite{jsComparasion} Pro naší aplikaci zvolíme ovšem React a to z několika důvodů:
+\begin{enumerate}
+    \item jednoduchý a lehce pochopitelný
+    \item snadná rozšiřitelnost, díky velkému množství balíčků
+    \item velká komunita a s tím spojená dobrá dokumentace
+    \item jednoduchá možnost dalšího rozšiřování již napsané aplikace, díky znovuvyužití již napsaných komponent.
+\end{enumerate}
+
+\textit{React} je, jak již bylo řečeno výše, knihovna psaná v JavaScriptu pro vytváření webových aplikací. Tato knihovna nám zajištuje základ pro vytváření webového grafického rozhraní.
+\textit{React} rozděluje
+jednotlivé prvky z rozhraní do komponent, které se poté dají kombinovat, znovu využívat a dá se u nich definovat rozšiřující chování. Na psaní v \textit{Reactu} není potřeba psaní
+si vlastních šablon, vše je psáno přímo v JavaScriptovém kódu. \cite{reactJS} Samotný React poté ještě rozšíříme o další knihovny, které nám usnadní práci s daty, přidají
+další komponenty, abychom je nemuseli znovu vytvářet sami a také zajistí správnou komunikaci s backendem.
 
 \subsection{Redux}
 
-Tím asi nejdůležitějším rozšířením Reactu v této práci je knihovna Redux. Redux je, stejně jako React, také knihovna pro JavaScript. Jeho hlavní funkcí je
+Tím asi nejdůležitějším rozšířením Reactu v této práci je knihovna \textit{Redux}. \textit{Redux} je, stejně jako \textit{React}, také knihovna pro JavaScript. Jeho hlavní funkcí je
 ukládání si stavů aplikace, tudíž je možné předem nadefinovat všechny stavy, ve kterých se naše aplikace může objevit a není problém se pohybovat na časové
-díky této vlastnosti. Je dobré podotknout, že tyto stavy jsou perzistentní. Pro propojení s Reactem existuje knihovna React-Redux přímo od vývojářů Reduxu. \cite{redux}
+díky této vlastnosti. Je dobré podotknout, že tyto stavy jsou perzistentní. Pro propojení s Reactem existuje knihovna \textit{React-Redux} přímo od vývojářů \textit{Reduxu}. \cite{redux}
+Díky tomuto je v \textit{Reactu} poté možné znovu načítat pouze jednotlivé komponenty a není potřeba načítat celou stránku znovu, což má za následek rychlejší odezvu stránek.
+Propojení \textit{React} komponenty s \textit{Redux} je jednoduché, stačí definovat takzvaný \textit{reducer}, neboli definici změny stavů v závislosti na akcích. Toto je
+poté jednoduše přemapováno na \textit{props}, což jsou vstupní hodnoty pro komponety, komponenty mají tedy přehled o aktuálním stavu aplikace a při změně se znovu vykreslují.
 
-\subsection{Reactstrap}
+\subsection{Reactstrap a formuláře}
 
-Pro frontend je táké důležité, aby všechny ovládácí prvky byly stejné a celá aplikace měla jednotný design. Reactstrap je knihovna rozšiřující React o komponenty,
-které jsou již nastylované a to za použití Bootstrap stylů. Tyto komponenty jsou poté použity v celé aplikaci a díky Bootstrapu nemusíme vytvářet vlastní styly,
-pokud si vystačíme s tím, co nám nábízí Bootstrap.
+Pro frontend je táké důležité, aby všechny ovládácí prvky byly stejné a celá aplikace měla jednotný design. \textit{Reactstrap} je knihovna rozšiřující \text{React} o komponenty,
+které jsou již nastylované a to za použití \textit{Bootstrap} stylů. Tyto komponenty jsou poté použity v celé aplikaci a díky Bootstrapu nemusíme vytvářet vlastní styly,
+pokud si vystačíme s tím, co nám nábízí \textit{Bootstrap}. \textit{Reactstrap} také nabízí sadu stylů pro formuláře, jejich validace bez odeslání dat by byla náročná, proto
+využijeme balíčku \textit{availity-reactstrap-validation}, který obaluje \textit{Reactstrap} komponenty vlastními. Tyto komponenty poté nabízejí jednoduchou formou možnost
+definovat pravidla, která musí platit pro jednotlivé pole ve formulářích, zde je menší ukázka formuláře z komponenty pro přihlášení \ref{lst:loginForm}. Prvky \texttt{AvInput}
+jsou deklarovány s atributem \texttt{required}, který říká, že dané pole nesmí být prázdné, pokud by bylo, objeví se zpráva, která je definována pro daný \texttt{AvInput} v
+\texttt{AvFeedback}. Definování \texttt{AvGroup} je zde pro to, abychom odlišili jednotlivé části formuláře a mohli pro ně definovat 2 různá chybová hlášení v závislosti na
+tom, kterého vstupu se chyba týká. Pokud by se přesto někdo pokusil odeslat formulář s neuplnými daty, je zde podmínka, která tomu braní a to v metodě \texttt{this.handleSubmit}
+na ukázce \ref{lst:conditionForm}.
+
+
+\begin{listing}[H]
+    \begin{minted}[linenos,breaklines]{js}
+//File: src/Auth/LoginPage.jsx LoginPage:render
+<AvForm name='login' onSubmit={this.handleSubmit}>
+<AvGroup>
+    <AvInput type="text" name="username" id="loginUsername" placeholder={t("Username or email")} required />
+    <AvFeedback>{t("Username or email is required.")}</AvFeedback>
+</AvGroup>
+<AvGroup>
+    <AvInput type="password" name="password" id="loginPassword" placeholder={t("Password")} required />
+    <AvFeedback>{t("Password is required.")}</AvFeedback>
+</AvGroup>
+<Button>{t("Login")}</Button>
+</AvForm>
+    \end{minted}
+    \caption{Přihlašovací formulář}
+    \label{lst:loginForm}
+\end{listing}
+
+\begin{listing}[H]
+    \begin{minted}[linenos,breaklines]{js}
+handleSubmit(e, err, val) {
+    if (err.length == 0) {
+        this.props.login(val);
+    }
+}
+    \end{minted}
+    \caption{Podmínka odeslání formuláře}
+    \label{lst:conditionForm}
+\end{listing}
+
+\subsection{Další moduly}
+
+V rámci aplikace je dobré od jejího začátku myslet na možnou lokalizaci textů, k tomu nám pomůže knihovna \textit{react-i18next}, díky které bude jednoduché překládat
+jednotlivé části aplikace. Pro snažší komunikaci s backendem využijeme balíčku \textit{refresh-fetch}, tento balíček nám poslouží pro jednoduchout implementaci obnovování přístupového
+\gls{jwt} tokenu za pomoci obnovovacího tokenu.
 
 \subsection{Struktura aplikace}
 
