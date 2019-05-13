@@ -1,2 +1,57 @@
-\section{Hodnocení přínosů práce}
+\section{Zhodnocení přínosů systém}
+
+Nyní je na čase zhodnotit přínosy našeho systému. Jednou z hlavních předností našeho systému je jeho
+forma šíření, jedná se o OSS (open source systém), neboli otevřený software, všechny zdrojové kódy
+jsou tedy veřejně dostupné a to na verzovacím portálu GitHub, kde si každý může stáhnout aktuální
+verzi a to jak frontendu, tak i backendu. Každý si také může vytvořit fork našeho kódu, fork je vlastně
+pouze kopírování verzovaného kódu do nového repozitáře. Díky tomu může kdokoliv vytvořit vlastní změny
+a případně požádat o jejich zapracování do původního repozitáře. Mimo jiné i zdrojový kód této práce
+se nachází na tomto portálu a je také veřejně přístupný.
+
+Práce kromě svého primárního účelu, kterým je generování dokumentů, může také posloužit jako výukový materiál
+pro začínající vývojáře, v práci i v implementaci jsou popsané základní postupy pro další rozvoj a při programování
+této práce byl kladen důraz na co největší kvalitu kódu, také na jeho snadné pochopení a jednoduchou orientaci v něm.
+
 \section{Porovnání s analýzou}
+
+V analýze jsme sepsali seznam funkčních a nefunkčních požadavků pro náš systém, nyní je na čase podívat se
+jak jsme je v naší implementaci naplnili a případně co nového jsme oproti analýze přidali. Ke každému požadavku
+se pokusíme přiřadit tu část aplikace, která naplňuje daný požadavek, u některých také dodáme, co jsme oproti analýze
+přidali či odebrali.
+
+\begin{enumerate}
+    \item Správa modulů, možnost jejich úpravy či smazání.
+
+          Tuto část a jsme v rámci naší implementace splnili a dokonce jsme ji ještě doplnili o repozitáře,
+          které nám zajistí jednodušší správu použitých modulů v dokumentech a také zjednodušší sdílení
+          modulů.
+    \item Generování dokumentů.
+
+          Generování dokumentů jsme splnili v plném rozsahu podle námi definovaných specifikací.
+    \item Verzování dokumentů i modulů.
+
+          Verzování modulů i dokumentů jsme zajistili pomocí ukládání předchozích stavů do databáze. Toto řešení
+          ovšem bude trpět na zatížený daty, tedy čím více dat budeme mít, tím horší můžeme očekávat výkon. Pro zlepšení
+          této situace by ovšem bylo třeba implementovat \gls{vcs}.
+    \item Modularita aplikace.
+
+         Z pohledu frontendu nám s modularitou aplikace velmi pomůže samotný \textit{React} a jeho komponenty, které lze znovu využít
+         a také jednoduše rozšířit. Při vytváření datového modelu pro backend jsme také mysleli na modularitu a snažili se o co
+         největší nezávislost mezi jednotlivými moduly.
+    \item Rozšiřitelnost aplikace.
+
+          S modularitou se pojí i jednoduchá rozšiřitelnost aplikace, díky modulárnímu návrhu i implementaci je tedy jednoduché
+          rozšířit naší aplikaci.
+    \item Správa uživatelů, možnost jejich registrování a přihlášení.
+
+          Společně se správou uživatelů jsme navrhli a implementovali i role, které nám mají pomoci zjednodušit správu oprávnění
+          pro dokumenty i repozitáře. Také nám může pomoci v dalších rozvojích aplikace s rozdělením uživatelů do určitých skupin.
+
+    \item Oprávnění pro dokumenty i moduly.
+
+          Oprávnění jsme již i v tomto závěrečném zhodnocení několikrát zmínili.
+    \item Rozdělení aplikace na backend a frontend.
+
+          Aplikace jsme již v návrhu rozdělili na frontend a backend, díky tomu máme možnost také vytvořit jednoduše například mobilní
+          aplikaci, neboť hlavní komunikace probíhá s \gls{rest} \gls{api} na backendu a obě části jsou na sobě více či méně nezávislé.
+\end{enumerate}

@@ -1,16 +1,28 @@
+Každou aplikaci je možné zlepšovat, ta naše ní výjimkou, tudíž zde nastíníme či konkrétněji popíšeme možná vylepšení aplikace,
+které mohou usnadnit testování, pomohou při vývoji nebo zlepší celkové chování aplikace. Jako nejdůležitější bych viděl implementaci
+automatického testování backendu pomocí integračních testů, zde si ukážeme menší ukázku jak by to mělo vypadat a jak by se mělo postupovat
+při tomto testování.
+
 \section{Testování backend části}
 
 Na backendu je potřeba otestovat hlavně jeho \gls{rest} \gls{api} metody, které se používají ke komunikaci. Pro jednoduché
-testování v rámci vývoje aplikace bylo využito nástroje Postman \cite{postmanSW}, tento nástroj lze v základní verzi použít
-zdarma. Nástroj slouží k definování \gls{http} dotazů, má možnosti definování různých parametrů a v rámci jednoho účtu umí sdílet
-uložené dotazy mezi zařízeními. Postman nabízí možnost testování dotazů, této možnosti ovšem nevyužijeme, na výsledné testování
-využijeme modulu \textit{pytest} v rámci jazyka Python.
+testování v rámci vývoje aplikace bylo využito nástroje Postman \cite{postmanSW}, tento nástroj ale není použitelný pro rozsáhlé
+a repetitivní testování. Tudíž se podíváme na využití jiného programu. Tím bude \textit{pytest}, jedná se rozšíření pro jazyk Python,
+který dovoluje jednoduché definování automatických testů.
 
 Než napíšeme první test v \textit{pytest}, je potřeba nastavit takzavené \textit{test fixtures}, \textit{test fixture} je základní část
 textu, která je pro všechny testy stejné, test fixture například představuje připojení k databázi, nebo může posloužit k načtení
 celé aplikace v rámci integračních testů. Zde je menší ukázka jak v naší aplikaci vypadá taková \textit{test fixtures} \ref{lst:testFixture}.
 
-\begin{listing}[H]
+Pro testování backendu by mohlo být použito integrování testování, kdy budeme testovat správné odpovědi na jednotlivé \gls{http} dotazy z našeho
+testovacího prostředí. Před samotným dotazem provedeme patřičné nasazení dat, na kterých provedeme testování naší odpovědi. Při této metodě
+testování se provádí test celého funkčního celku, tedy existuje připojení na databázi, exituje testovací
+klient, který se připojuje na testovací server. Zde je ukázka takového testu na příkladu s testem přihlášení \ref{lst:authTest}. V této ukázce
+je vidět volání funkce \texttt{test\_login}, parametry této funkce jsou \textit{test fixtures}, první je náš testovací klient, který umí odeslat
+\gls{http} dotaz na backend, druhým je připojení k testovací databázi, díky tomu můžeme přími vkládat data do databáze, díky tomu také máme
+možnost kontrolovat správnost dat přímo v databázi a zajistit tak správnost výsledku.
+
+\begin{listing}[h]
     \begin{minted}[linenos,breaklines]{python}
 # Ukázka z test/conftest.py
 import pytest
@@ -36,15 +48,7 @@ def app():
     \label{lst:testFixture}
 \end{listing}
 
-Pro testování backendu bude použito integrování testování, kdy budeme testovat správné odpovědi na jednotlivé \gls{http} dotazy z našeho
-testovacího prostředí. Před samotným dotazem provedeme patřičné nasazení dat, na kterých provedeme testování naší odpovědi. Tato metoda
-testování se nazývá integritní testování, kdy se provádí test celého funkčního celku, tedy existuje připojení na databázi, exituje testovací
-klient, který se připojuje na testovací server. Zde je ukázka takového testu na příkladu s testem přihlášení \ref{lst:authTest}. V této ukázce
-je vidět volání funkce \texttt{test\_login}, parametry této funkce jsou \textit{test fixtures}, první je náš testovací klient, který umí odeslat
-\gls{http} dotaz na backend, druhým je připojení k testovací databázi, díky tomu můžeme přími vkládat data do databáze, díky tomu také máme
-možnost kontrolovat správnost dat přímo v databázi a zajistit tak správnost výsledku.
-
-\begin{listing}[H]
+\begin{listing}[h]
     \begin{minted}[linenos,breaklines]{python}
 # ukázka t test_auth.py
 from moddoc.model import User
@@ -77,5 +81,11 @@ unit testy, neboli testy jednotlivých funkcí. Tyto testy se vyznačují tím, 
 vyskytuje volání další funkce je třeba toto volání takzvaně \textit{mockovat}. \textit{Mockování} je nahrazování původního volání novým voláním,
 lze takto nahradit například komunikaci s databází, která by v rámci unit testů neměla být využita.
 
-\section{Testování frontend části}
+\clearpage
 
+\section{Integrace lepšího verzování}
+
+V zhodnocení aplikace jsme již na toto téma narazili. Nyní si řekněme jak by takové řešení mělo vypadat. Možností jak toto udělat je několik,
+ale asi nejjednodušší verzí by byla integrace příkazů z \textit{gitu} (\textit{git} je implementace \gls{vcs}) přímo v našem kódu a možnost propojení buď s veřejným repozitářem,
+či vlastním hostovaným \gls{vcs} serverem. S tímto je také ale spojená nutnost změnit princip ukládání modulů i dokumentů a také vytvoření nové
+logiky pro vytváření předchozích verzí, kdy by se verze orientovali podle příslušných verzí z verzovacího systému \textit{git}.
