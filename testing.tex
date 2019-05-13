@@ -3,7 +3,9 @@
 V rámci vývoje je také potřeba testovat a zároveň i dokumentovat jednotlivé části. V našem případě při vývoji použijeme
 k testování \gls{api} nástroj Postman \cite{postmanSW}, který nám poslouží nejen k dokumentaci našeho backendového \gls{api},
 ale také bude fungovat k okamžitému testování našich metod. V Postman je možné definovat jednotlivé dotazy pro náš server s možností
-jejich parametrizace a automatického přidání \gls{jwt} tokenu pro ověření uživatele. Na přiloženém médiu je poté kompletní výstup z
+jejich parametrizace a automatického přidání \gls{jwt} tokenu pro ověření uživatele. Mimo možnosti definovat jednotlivé dotazy, lze také vytvořit
+pro celé prostředí jednotnou sadu parametrů, které poté mohou být využity v dotazech, ať již ve formě parametrů v \gls{url} nebo také k ukládání
+proměnných, které se mohou lišit mezi zařízeními (například adresa testovacího serveru). Na přiloženém médiu je poté kompletní výstup z
 tohoto programu. Program je volně ke stažení a je možné sdílet data z jednoho zařízení na další v rámci jednoho účtu, nebo sdílet data
 v týmu, tato možnost je již ovšem za poplatek.
 
@@ -13,9 +15,12 @@ V rámci testování sepíšeme jednodtlivé scénáře, které uživatel má ot
 úpravy aplikace. Jak zde již zaznělo testy neprobíhájí na produkčním prostředí, ovšem prostředí na kterém probíhají by mělo být co
 nejvíce podobné produkčnímu prostředí, aby nevznikly chyby v důsledku jiných konfigurací, či systémů.
 
+\clearpage
+
 \section{Nasazení}
 
-Nasazení aplikací se od sebe trochu liší, proto tuto část rozdělíme na 2, ve kterých popíšeme nasazení jednotlivých částí.
+Nasazení aplikací se od sebe trochu liší, proto tuto část rozdělíme na 2, ve kterých popíšeme nasazení jednotlivých částí nejenom na produkční
+prostředí, ale také jejich vývojové prostředí.
 
 \subsection{Backend}
 
@@ -24,12 +29,17 @@ jednoduše nainstlovat všechny potřebné balíčky, které budeme potřebovat 
 tedy stačí na serveru spustit příkaz \texttt{python setup.py install}, jedinou podmínkou je přitomnost \textit{Setuptools}
 na serveru. Před instalací je také dobré nastavit nové připojení na databázi a bezpečnostní klíč. Toto se provede vytvořením
 souboru \texttt{config.py} ve složce \texttt{instance}, kterou je potřeba vytvořit v hlavním adresáři aplikace. \textit{Flask} sice nabízí možnost vlastního serveru, jedná se ovšem
-pouze o funkci, která má sloužit vývojářům při vývoji, pro ostré nasazení je toto řešení nestabilní. Proto je potřeba použití WSGI (Web Server Gateway Interface), jedná se o interface
-mezi webovým serverem a webovou aplikací psanou v jazyce Python. Některé webové servery mají tuto vlastnost již přímo integrovanou (Apache), které WSGI ovšem bude zvoleno
+pouze o~funkci, která má sloužit vývojářům při vývoji, pro ostré nasazení je toto řešení nestabilní. Proto je potřeba použití WSGI (Web Server Gateway Interface), jedná se o~interface
+mezi webovým serverem a webovou aplikací psanou v~jazyce Python. Některé webové servery mají tuto vlastnost již přímo integrovanou (Apache), které WSGI ovšem bude zvoleno
 je čistě na správci serveru, na stránkách dokumentace k \textit{Flask} naleznete ukázky pro jednotlivá řešení \cite{flaskDeploy}.
 
 
 \subsection{Frontend}
 
-Pro frontend využijeme \textit{webpack}, jedná se o modul, který slouží k vytváření balíčků z našeho zdrojového kódu. Výstupem
-\textit{webpack} je JavaScriptový, pro nasazení na produkci použijeme funkci
+Pro frontend využijeme \textit{webpack}, jedná se o modul, který slouží k vytváření balíčků z našeho zdrojového kódu. Tento modul
+využijeme již v průběhu vývoje naší aplikace, kdy nám bude kompilovat naše soubory pro lokální použití a také kontroluje importy a exporty
+souborů, aby nenastal problém s chybějící referencí. \textit{Webpack} si také umí poradit se soubory ve formátu \gls{scss}, které přeloží
+do formátu \gls{css}. Ovšem \textit{webpack} neslouží pouze k obsluze vývojového serveru, ale dá se použít i jako kompilátor pro výsledné
+produkční prostředí. Pro tuto vlastnost stačí použít příkaz \texttt{webpack -p --config webpack.config.js}, \textit{webpack} poté vytvoří
+ve složce \texttt{dist} výsledný \texttt{main.js} a další soubory. Tyto soubory lze poté nahrát na produkční server, kde aplikace bude
+umístěna.
