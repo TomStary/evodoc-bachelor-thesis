@@ -1,5 +1,5 @@
 Implementaci rozdělíme na 2 části a to na část zabívající se backendem, tedy mozkem naší aplikace, která bude zodpovídat
-za ukladání a zpracování dat, bude nám také sloužit jako autentifikační server. A poté na frontend, tedy část, která
+za ukládání a zpracování dat, bude nám také sloužit jako autentifikační server. A poté na frontend, tedy část, která
 je zodpovědné za komunikaci s backendem a také bude zpostředkovávat zobrazení dat z backendu uživateli.
 
 \section{Backend}
@@ -24,9 +24,13 @@ V rámci ověřovaní uživatelů musíme zajistit zabezpečenou komunikaci mezi
 každý dotaz do té části aplikace, kam mají přístup pouze přihlášení uživatelé. Toho docílíme pomocí modulu, který rožšiřujeme Flask,
 \textit{Flask-jwt-extended}. Pro správnou funkci tohoto modulu je třeba mít nastavený tajný klíč pro aplikaci, který slouží k šifrování \gls{jwt},
 ve kterém se nachází identifikátor uživatele. Dále je potřeba definovat funkce pro načítání uživatele a jeho rolí, toto poté použijeme pro kontrolu
-oprávnění uživatele a získávání dat, která jsou vázána na uživatele, zde je ukázka \ref{lst:flaskJWTCode}.
+oprávnění uživatele a získávání dat, která jsou vázána na uživatele, zde je ukázka \ref{lst:flaskJWTCode}. Kromě možnosti sdílení tokenu musíme
+také v naší aplikaci vyřešit možnost bezpečného ukládání hesla v naší databázi. Z~bezpečnostního hlediska je nutné zajistit, nemožnost zpětného
+zjištění hesla zadaného uživatelem. Toto není úplně možné díky \textit{brute force} útokům, neboli útokům hrubou silou, při které jsou zkoušeny
+všechny možné kombinace pro dané heslo. Ovšem tomuto se dá lépe předejít silným heslem. Pro šifrování hesla na databázi použijeme modulu \textit{flask-bcrypt}
+který implementuje užití hashovací metody bcrypt ve \textit{Flasku}.
 
-\begin{listing}
+\begin{listing}[H]
     \begin{minted}[linenos,breaklines]{python}
 # File: moddoc/service/auth_service.py
 
@@ -55,9 +59,18 @@ Podporuje většinu \gls{sql} implementací a serverů. V našem případě bude
 v aplikaci používáme jako identifikátor všech modelů používáme \gls{guid}, základní implementace \textit{SQLAlchemy} nám ovšem tento datový typ nativně nepodporuje, stejně jako
 některé \gls{sql} servery. Proto si vytvoříme vlastní datový typ \gls{guid}, ukázku jak na to nalezeme i v oficiální dokumentaci \textit{SQLAlchemy} \cite{sqlalchemyGuid}. Jak lze
 vidět v ukázce kódu \ref{lst:guidImplementation}, při vytváření tohoto typu je provedena kontrola, s jakou databází bude aplikace pracovat a podle toho se rozhodne jaký datový typ
-bude v rámci databáze použit. Toto se provádí protože ne všechny databáze si umí poradit s GUID datovým formátem.
+bude v rámci databáze použit. Toto se provádí protože ne všechny databáze si umí poradit s GUID datovým formátem. Další úpravou, kterou provedeme na implementaci
+\textit{Flask-SQLAlchemy} je zavedení si vlastního základního modelu, ze kterého pak budeme vytvářet všechny ostatní modely. Tento základní model bude mít
+v sobě definovaný identifikátor v~GUID formátu, který jsme si zavedli v naší aplikaci. Díky tomu bude mít každý objekt unikátní identifikátor, neboli také primární
+klíč. Díky tomuto bude snadnější a rychlejší vyhledávání dat v databázi a to díky využití indexů, které si databáze automaticky vytváří. Dále si také definujeme
+rozšíření pro modely, které jim bude přidávat určité atribury, tyto atributy jsou stejné v některých tabulkách a nechceme je při vytváření nových tabulek znovu
+vypisovat, proto vytvoříme \textit{model mixin}, tato třída v sobě bude obsahovat pouze definice sloupců, které jsou stejné v těchto určitých tabulkách. Pro upřesnění,
+bude se jednat o zavedení takzvaného \uv{soft delete} systému, který nám bude sloužit k virtuálnímu mazání objektů, objektu se pouze nastaví příznak, že byl smazán, ale nebude
+smazán z databáze, tudíž jej bude možné obnovit. Tato úprava si také ale žádá definovaní upravených databázových dotazů, s tím nám pomůže definice vlastní
+\texttt{QueryClass}, tedy třídy zodpovědné za vytváření dotazů v \textit{Flask-SQLAlchemy} na naší databázi. V této třídě a třídách, které dědí tuto třídu
+si poté vytvoříme nové metody, které budou myslet na filtrování dat s příznakem \texttt{deleted} jako by byly smazané.
 
-\begin{listing}
+\begin{listing}[H]
     \begin{minted}[linenos,breaklines]{python}
 from sqlalchemy.types import TypeDecorator, CHAR
 from sqlalchemy.dialects.postgresql import UUID
@@ -110,9 +123,9 @@ nejen formát dat, ale také definuje formát výstupních dat, která budou na�
 
 \subsection{Generování dokumentů}
 
-Asi nejdůležitější částí je generování samotných dokumentů. Jak již bylo v textu této práce zmíněno, bude využit software Pandoc \cite{pandocSW}, abychom mohli s tímto softwarem
+Asi nejdůležitější částí je generování samotných dokumentů. Jak již bylo\linebreak v~textu této práce zmíněno, bude využit software Pandoc \cite{pandocSW}, abychom mohli s tímto softwarem
 komunikovat, využijeme modul \textit{pypandoc}, který nám poskytne \gls{api} rozhraní pro komunikaci s Pandoc. Pro vytvoření našeho dokumenty již máme skoro vše potřebné, nyní
-je potřeba pouze zajistit zdrojové soubory, ze kterých by se mohl výsledný dokument skládat. Protože si u každého dokumentu pamatujeme, jaké repozitáře jsou použity, můžeme
+je potřeba pouze zajistit zdrojové soubory, ze kterých by se mohl výsledný dokument skládat. Protože si u~každého dokumentu pamatujeme, jaké repozitáře jsou použity, můžeme
 tyto repozitáře projít a pro každý modul v nich obsažený vytvořit soubor, který bude obsahovat data z modulu. Název takového souboru se pak bude určovat podle identifikátoru
 z databáze pro tento modul. Pokud bude v dokumentu použit odkaz na tento identifikátor bude zaručeno, že dokument bude generován vždy s nejnovější verzí modulu. Pro generování
 dokumentu se specifickou verzí modulu, je třeba uvést jako odkaz identifikátor této verze. Před každým generování dokumentu se nejdříve vytvoří všechny potřebné soubory z modulů,
@@ -167,7 +180,7 @@ Tím asi nejdůležitějším rozšířením Reactu v této práci je knihovna \
 ukládání si stavů aplikace, tudíž je možné předem nadefinovat všechny stavy, ve kterých se naše aplikace může objevit a není problém se pohybovat na časové
 díky této vlastnosti. Je dobré podotknout, že tyto stavy jsou perzistentní. Pro propojení s Reactem existuje knihovna \textit{React-Redux} přímo od vývojářů \textit{Reduxu}. \cite{redux}
 Díky tomuto je v \textit{Reactu} poté možné znovu načítat pouze jednotlivé komponenty a není potřeba načítat celou stránku znovu, což má za následek rychlejší odezvu stránek.
-Propojení \textit{React} komponenty s \textit{Redux} je jednoduché, stačí definovat takzvaný \textit{reducer}, neboli definici změny stavů v závislosti na akcích. Toto je
+Propojení \textit{React} komponenty s \textit{Redux} je jednoduché, stačí definovat takzvaný \textit{reducer}, neboli definici změny stavů v~závislosti na akcích. Toto je
 poté jednoduše přemapováno na \textit{props}, což jsou vstupní hodnoty pro komponety, komponenty mají tedy přehled o aktuálním stavu aplikace a při změně se znovu vykreslují.
 
 \subsection{Reactstrap a formuláře}
@@ -178,7 +191,7 @@ pokud si vystačíme s tím, co nám nábízí \textit{Bootstrap}. \textit{React
 využijeme balíčku \textit{availity-reactstrap-validation}, který obaluje \textit{Reactstrap} komponenty vlastními. Tyto komponenty poté nabízejí jednoduchou formou možnost
 definovat pravidla, která musí platit pro jednotlivé pole ve formulářích, zde je menší ukázka formuláře z komponenty pro přihlášení \ref{lst:loginForm}. Prvky \texttt{AvInput}
 jsou deklarovány s atributem \texttt{required}, který říká, že dané pole nesmí být prázdné, pokud by bylo, objeví se zpráva, která je definována pro daný \texttt{AvInput} v
-\texttt{AvFeedback}. Definování \texttt{AvGroup} je zde pro to, abychom odlišili jednotlivé části formuláře a mohli pro ně definovat 2 různá chybová hlášení v závislosti na
+\texttt{AvFeedback}. Definování \texttt{AvGroup} je zde pro to, abychom odlišili jednotlivé části formuláře a mohli pro ně definovat 2 různá chybová hlášení v~závislosti na
 tom, kterého vstupu se chyba týká. Pokud by se přesto někdo pokusil odeslat formulář s neuplnými daty, je zde podmínka, která tomu braní a to v metodě \texttt{this.handleSubmit}
 na ukázce \ref{lst:conditionForm}.
 

@@ -11,11 +11,19 @@ v týmu, tato možnost je již ovšem za poplatek.
 
 Výsledné testování proběhne pomocí akceptačních testů, jedná se o testy,
 které jsou provedeny manuálně před samotným nasazením aplikace na produkční prostředí. Testy jsou prováděny podle příkladů užití z návrhu.
-V rámci testování sepíšeme jednodtlivé scénáře, které uživatel má otestovat, na základně výsledků těchto testů poté provedeme potřebné
-úpravy aplikace. Jak zde již zaznělo testy neprobíhájí na produkčním prostředí, ovšem prostředí na kterém probíhají by mělo být co
-nejvíce podobné produkčnímu prostředí, aby nevznikly chyby v důsledku jiných konfigurací, či systémů.
-
-\clearpage
+Toto testování probíhalo v konfiguraci co nejvíce podobné produkčnímu prostředí, aby nevznikly poté potíže v důsledku jiného prostředí, či
+rozdílných konfigurací. Testy se prováděly podle příkladů užití z návrhu. Na základě těchto testů ještě byly provedeny patřičné změny v aplikaci.
+Zde je ukázka takového testu pro vytvoření nového uživatelského účtu, příhlášení se a poté také možnosti tento účet upravit.
+Nejdříve jsme si vytvořili seznam částí programu, které chceme podrobit testování.
+\begin{enumerate}
+    \item Uživatel musí mít možnost se zaregistrovat s platnými údaji, pokud údaje jsou neúplné, či neplatné je třeba o tom uživatele informovat.
+    \item Registrovaný uživatel je poté schopen se přihlásit do svého nově vytvořeného účtu.
+    \item Přihlášený uživatel má možnost měni své údaje.
+\end{enumerate}
+Na základě tohoto seznamu proběhly kontroly všech zmíněných částí. Problém nastal pouze u změny údajů, kdy se uživateli nezobrazovalo chybové
+hlášení při změně údajů na údaje, které ovšem v systému má již jiný uživatel. Podobně byl poté takto zkontrolován celý systém.
+A podle jednotlivých průchodý jsme posléze opravili chyby, které se v systému vyskytovali. Po těchto testech je naše aplikace
+připravena k nasazení na produkční prostředí.
 
 \section{Nasazení}
 

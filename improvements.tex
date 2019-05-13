@@ -1,5 +1,5 @@
 Každou aplikaci je možné zlepšovat, ta naše ní výjimkou, tudíž zde nastíníme či konkrétněji popíšeme možná vylepšení aplikace,
-které mohou usnadnit testování, pomohou při vývoji nebo zlepší celkové chování aplikace. Jako nejdůležitější bych viděl implementaci
+které mohou usnadnit testování, pomohou při vývoji nebo zlepší celkové chování aplikace. Jako nejdůle\-žitější bych viděl implementaci
 automatického testování backendu pomocí integračních testů, zde si ukážeme menší ukázku jak by to mělo vypadat a jak by se mělo postupovat
 při tomto testování.
 
@@ -20,7 +20,7 @@ testování se provádí test celého funkčního celku, tedy existuje připojen
 klient, který se připojuje na testovací server. Zde je ukázka takového testu na příkladu s testem přihlášení \ref{lst:authTest}. V této ukázce
 je vidět volání funkce \texttt{test\_login}, parametry této funkce jsou \textit{test fixtures}, první je náš testovací klient, který umí odeslat
 \gls{http} dotaz na backend, druhým je připojení k testovací databázi, díky tomu můžeme přími vkládat data do databáze, díky tomu také máme
-možnost kontrolovat správnost dat přímo v databázi a zajistit tak správnost výsledku.
+možnost kontrolovat správnost dat přímo v~databázi a zajistit tak správnost výsledku.
 
 \begin{listing}[h]
     \begin{minted}[linenos,breaklines]{python}
@@ -71,7 +71,7 @@ def test_login(client, db):
     assert response.status_code == 200
     assert response.get_json()['access_token'] is not None
     \end{minted}
-    \caption{Integritní test příhlášení}
+    \caption{Integrační test příhlášení}
     \label{lst:authTest}
 \end{listing}
 

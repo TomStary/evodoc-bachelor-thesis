@@ -1,6 +1,6 @@
 Po analýze tvorby dokumentů a nástrojů na vytváření dokumentů je na čase připravit návrh aplikace, která bude řešit správu, vytváření a verzování
 modulárních dokumentů. Tato kapitola bude rozdělena do jednotlivých sekcích, ve kterých budeme podrobně popisovat návrh dané sekce v naší aplikaci.
-V rámci návrhu nesmíme opomenout ani možnosti budoucího rozšíření.
+V~rámci návrhu nesmíme opomenout ani možnosti budoucího rozšíření.
 
 \section{Užitelská sekce}
 
@@ -12,10 +12,10 @@ dále v textu. Aby hlavní administrátor aplikace nemusel tyto požadavky na p�
 správce přístupu, který bude mít možnost, stejně jako administrátor, hromadně přidělovat či odebírat role. Ovšem pouze administrátor může přiřadit roli správce přístupu.
 
 Nyní si probereme vlastnosti uživatele, budeme potřebovat uživatele jednoznačně identifikovat, je tedy potřeba od uživatele získat nějaký údaj, který bude unikátní
-jako například uživatelské jméno, dále si od uživatele vyžádáme ještě email, který může být posléze použit k doručení zpráv a upozornění z aplikace. Tímto se ovšem
+jako například uživatelské jméno, dále si od uživatele vyžádáme ještě email, který může být posléze použit k doručení zpráv a upozornění z~aplikace. Tímto se ovšem
 dostáváme k nutnosti myslet na ochranu osobních údajů, která prošla v posledních letech změnou v důsledky nabití účinosti evropského nařízení \gls{gdpr}.
 
-V tomto UC diagramu \ref{fig:userUCDiagram} naleznete rozpis všech UC, které se týkají uživatelské sekce. Zároveň k tomu je zde také stavový diagram \ref{fig:userFlow},
+V~tomto UC diagramu \ref{fig:userUCDiagram} naleznete rozpis všech UC, které se týkají uživatelské sekce. Zároveň k tomu je zde také stavový diagram \ref{fig:userFlow},
 který nám ukazuje jednotlivé stavy uživatele, vzhledem k systému a které akce mají vliv na jeho stav.
 
 \begin{figure}[H]
@@ -36,9 +36,9 @@ který nám ukazuje jednotlivé stavy uživatele, vzhledem k systému a které a
 
 Naše aplikace bude pracovat s osobními údaji, je nutné toto brát na~vědomí, proto se nyní podívejme na to, co musí naše aplikace splňovat, aby dodržela všechny
 zákony o ochraně osobních údají a směrnice Evropské unie, \gls{gdpr}. První co je nutné brát na vědomí je účel, za kterým údaje chceme údaje sbírat a uchovávat a jestli je náš
-účel oprávněný. V tomto případě o uživateli získáme osobní údaj v podobě emailu, který stačí k identifikaci určité osoby. V našem případě je email identifikátor uživatele
-a budeme jej při registraci žádat o souhlas se zpracováním osobních údajů. Dále musíme myslet na možnost smazání či anonymizace údajů uživatele. Toho docílíme ručními
-zásahy do databáze, kde využijeme možnosti změnit email na jeho hash. \cite{gdpr}
+účel oprávněný. V tomto případě o uživateli získáme osobní údaj v podobě emailu, který stačí k identifikaci určité osoby. V~našem případě je email identifikátor uživatele
+a budeme jej při registraci žádat o~\mbox{souhlas} se zpracováním osobních údajů. Dále musíme myslet na\linebreak možnost smazání či anonymizace údajů uživatele. Toho docílíme ručními
+zá\-sahy do databáze, kde využijeme možnosti změnit email na jeho hash. \cite{gdpr}
 
 \section{Repozitáře}
 
@@ -101,8 +101,8 @@ poslouží k udržení identity po přihlášení. Na tomoto diagramu \ref{fig:s
 
 \section{Možnosti rozšíření}
 
-Protože každý systém se postupně rozvíjí a rozšiřuje, musíme na tuto skutečnost myslet již při návrhu, snažíme se tedy, aby jednotlivé části systému byly od sebe
-oddělené a mohli fungovat i bez ostatních částí. Například propojení mezi moduly a uživateli je pouze na základě jedné vazební tabulky, která slouží k dekompozici vztahu
+Protože každý systém se postupně rozvíjí a rozšiřuje, musíme na tuto skuteč\-nost myslet již při návrhu, snažíme se tedy, aby jednotlivé části systému byly od sebe
+oddělené a mohli fungovat i bez ostatních částí. Například propojení mezi moduly a uživateli je pouze na základě jedné vazební tabulky, která slouží k~dekompozici vztahu
 M:N. U modulů je také podstatné, aby bylo možné jim v dalším vývoji přidat další atributy jako například typ modulu, toho docílíme tím, že moduly budou samostatnou tabulkou v databázi
 a bude ji tedy možné rožšířit o další atributy, při této úpravě ovšem neohrozíme již původní data a nebude pro nás tedy takovou změnu implementovat. Podobně je tomu i u~dokumentů a uživatelů
 modely se snažíme dělat co nejmenší s jednoduchou možností rozšíření viz \ref{fig:moduleDia}.
