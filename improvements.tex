@@ -1,25 +1,24 @@
-Každou aplikaci je možné zlepšovat, ta naše ní výjimkou, tudíž zde nastíníme či konkrétněji popíšeme možná vylepšení aplikace,
-které mohou usnadnit testování, pomohou při vývoji nebo zlepší celkové chování aplikace. Jako nejdůle\-žitější bych viděl implementaci
-automatického testování backendu pomocí integračních testů, zde si ukážeme menší ukázku jak by to mělo vypadat a jak by se mělo postupovat
-při tomto testování.
+Každou aplikaci je možné zlepšovat. Naše není výjimkou. V~této části konkrétněji popíšeme možná vylepšení aplikace,
+které mohou usnadnit testování a pomohou při vývoji nebo zlepší celkové chování aplikace. Za nejdůležitější si dovolíme označit
+automatické testování backendu pomocí integračních testů. Zde si ukážeme menší ukázku, jak by takové testování mělo vypadat.
 
 \section{Testování backend části}
 
 Na backendu je potřeba otestovat hlavně jeho \gls{rest} \gls{api} metody, které se používají ke komunikaci. Pro jednoduché
 testování v rámci vývoje aplikace bylo využito nástroje Postman \cite{postmanSW}, tento nástroj ale není použitelný pro rozsáhlé
-a repetitivní testování. Tudíž se podíváme na využití jiného programu. Tím bude \textit{pytest}, jedná se rozšíření pro jazyk Python,
+a repetitivní testování. Proto se podíváme na využití jiného programu. Tím bude \textit{pytest}. Jde o rozšíření pro jazyk Python,
 který dovoluje jednoduché definování automatických testů.
 
-Než napíšeme první test v \textit{pytest}, je potřeba nastavit takzavené \textit{test fixtures}, \textit{test fixture} je základní část
-textu, která je pro všechny testy stejné, test fixture například představuje připojení k databázi, nebo může posloužit k načtení
+Než napíšeme první test v \textit{pytest}, je potřeba nastavit \textit{test fixtures}. \textit{Test fixture} je základní část
+testu, která je pro všechny testy stejná. \textit{Test fixture} například představuje připojení k databázi, nebo může posloužit k načtení
 celé aplikace v rámci integračních testů. Zde je menší ukázka jak v naší aplikaci vypadá taková \textit{test fixtures} \ref{lst:testFixture}.
 
-Pro testování backendu by mohlo být použito integrování testování, kdy budeme testovat správné odpovědi na jednotlivé \gls{http} dotazy z našeho
+Pro testování backendu by mělo být použito integrační testování, kdy budeme testovat správné odpovědi na jednotlivé \gls{http} dotazy z našeho
 testovacího prostředí. Před samotným dotazem provedeme patřičné nasazení dat, na kterých provedeme testování naší odpovědi. Při této metodě
-testování se provádí test celého funkčního celku, tedy existuje připojení na databázi, exituje testovací
+testování se provádí test celého funkčního celku. Existuje připojení na databázi a testovací
 klient, který se připojuje na testovací server. Zde je ukázka takového testu na příkladu s testem přihlášení \ref{lst:authTest}. V této ukázce
-je vidět volání funkce \texttt{test\_login}, parametry této funkce jsou \textit{test fixtures}, první je náš testovací klient, který umí odeslat
-\gls{http} dotaz na backend, druhým je připojení k testovací databázi, díky tomu můžeme přími vkládat data do databáze, díky tomu také máme
+je vidět volání funkce \texttt{test\_login}. Parametry této funkce jsou \textit{test fixtures}. Prvním je náš testovací klient, který umí odeslat
+\gls{http} dotaz na backend, druhým je připojení k testovací databázi, můžeme tedy přímo vkládat data do databáze, díky tomu také máme
 možnost kontrolovat správnost dat přímo v~databázi a zajistit tak správnost výsledku.
 
 \begin{listing}[h]
@@ -50,7 +49,7 @@ def app():
 
 \begin{listing}[h]
     \begin{minted}[linenos,breaklines]{python}
-# ukázka t test_auth.py
+# ukázka  test/test_auth.py
 from moddoc.model import User
 
 
@@ -76,16 +75,24 @@ def test_login(client, db):
 \end{listing}
 
 Díky těmto testům můžeme snadno a rychle pokrýt celou funkcionalitu backendu, a můžeme zaručit správné zpracování dat ze strany backendu.
-Ovšem tato metoda testování nám v případě chyby v některé z části kódu neukáže hned přesné místo, kde problém vznikl, s tím by nám pomohli
-unit testy, neboli testy jednotlivých funkcí. Tyto testy se vyznačují tím, že testují pouze danou funkci či metodu. Pokud se v testované funkci
-vyskytuje volání další funkce je třeba toto volání takzvaně \textit{mockovat}. \textit{Mockování} je nahrazování původního volání novým voláním,
-lze takto nahradit například komunikaci s databází, která by v rámci unit testů neměla být využita.
+Ovšem tato metoda testování nám v případě chyby v některé z části kódu neukáže hned přesné místo, kde problém vznikl. S tím by nám pomohly
+\textit{unit} testy, neboli testy jednotlivých funkcí. Tyto testy se vyznačují tím, že testují pouze danou funkci či metodu. Pokud se v testované funkci
+vyskytuje volání další funkce, je třeba toto volání takzvaně \textit{mockovat}. \textit{Mockování} je nahrazování původního volání novým voláním a
+lze takto nahradit například komunikaci s databází, která by v rámci unit testů neměla být využita. \textit{Unit testování} je dalším dobrým
+rozšířením pro naší aplikaci.
 
 \clearpage
 
 \section{Integrace lepšího verzování}
 
-V zhodnocení aplikace jsme již na toto téma narazili. Nyní si řekněme jak by takové řešení mělo vypadat. Možností jak toto udělat je několik,
-ale asi nejjednodušší verzí by byla integrace příkazů z \textit{gitu} (\textit{git} je implementace \gls{vcs}) přímo v našem kódu a možnost propojení buď s veřejným repozitářem,
-či vlastním hostovaným \gls{vcs} serverem. S tímto je také ale spojená nutnost změnit princip ukládání modulů i dokumentů a také vytvoření nové
-logiky pro vytváření předchozích verzí, kdy by se verze orientovali podle příslušných verzí z verzovacího systému \textit{git}.
+V hodnocení aplikace jsme již na toto téma narazili. Nyní si řekněme, jak by takové řešení mělo vypadat. Možností jak toto udělat, je několik,
+ale asi nejjednodušší verzí se zdá být integrace příkazů z \textit{gitu} (\textit{git} je implementace \gls{vcs}) přímo v našem kódu a možnost propojení buď s veřejným repozitářem
+anebo vlastním hostovaným \gls{vcs} serverem. S tímto je také spojená nutnost změnit princip ukládání modulů i dokumentů a také vytvoření nové
+logiky pro vytváření předchozích verzí, kdy by se verze orientovaly podle příslušných verzí z verzovacího systému \textit{git}.
+
+\section{Možnost online náhledu}
+
+Dalším možným rozšířením pro naší aplikaci by byla možnost náhledu dokumentu a modulů ve fázi úprav. Uživatel by tak měl možnost
+jednodušší kontroly formátování výsledného dokumentu nebo modulu. Pro vytváření těchto náhledů by bylo možné využít \textit{docutils},
+které jsme již zmínili v analýze nástrojů. Zároveň s náhledem by bylo možné také definovat vlastní úpravy pro styl, ve kterém
+bude výsledný dokument generován.

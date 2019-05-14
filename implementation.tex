@@ -1,6 +1,6 @@
 Implementaci rozdělíme na 2 části a to na část zabívající se backendem, tedy mozkem naší aplikace, která bude zodpovídat
-za ukládání a zpracování dat, bude nám také sloužit jako autentifikační server. A poté na frontend, tedy část, která
-je zodpovědné za komunikaci s backendem a také bude zpostředkovávat zobrazení dat z backendu uživateli.
+za ukládání a zpracování dat a bude nám také sloužit jako autentifikační server. A poté na frontend, tedy část, která
+je odpovědná za komunikaci s backendem a také bude zpostředkovávat zobrazení dat z backendu uživateli.
 
 \section{Backend}
 
@@ -10,24 +10,24 @@ který budeme používat při vývoji backendové části naší aplikace.
 Dalším důvodem pro výběr tohoto jazyka je modul \textit{pypandoc},
 který nám umožňuje převádění reStructuredText na jiné formáty a díky tomuto modulu budeme moci jednoduše generovat naše dokumenty. Mezi jazyky
 Python a Ruby nejsou velké rozdíly, oba jsou skriptovací jazyky. Ruby je většinou vnímán pouze jako jazyk na vytváření webových stránek, na druhé straně
-Python se snaží zaměřit na univerzálnost jeho použití. \cite{pythonRubyFight}
+Python je zaměřen na univerzálnost jeho použití. \cite{pythonRubyFight}
 
 Jako základ backendu využijeme \textit{Flask}, \uv{což je mikroframework pro Python založený na Werkzeug, Jinja 2 a dobrých záměrů.} \cite{flaskDoc}
 Tento mikroframework nabízí vytváření stránek ve formátu \gls{html}, toto ovšem \mbox{nebude} třeba, \mbox{neboť} celý backend je složen pouze z \gls{rest} metod,
 které slouží k~získání či úpravě dat. Konkrétně použijeme \gls{http} metody GET, POST a DELETE, které provedou určitou akci na základě volané adresy.
 Pro další funkcnionality využíváme v mnoha případech moduly, které rozšižují základní \textit{Flask}. Důvodem pro výběr tohoto frameworku
-je jeho snadná rozšiřitelnost pomocí modulů, také nám umožňuje vytvořit jednoduchou webovou aplikaci bez\linebreak zbytečných částí, které by nebyly použity.
+je jeho snadná rozšiřitelnost pomocí modulů a také nám umožňuje vytvořit jednoduchou webovou aplikaci bez\linebreak zbytečných částí, které by nebyly použity.
 
 \subsection{Ověřování uživatele}
 
 V rámci ověřovaní uživatelů musíme zajistit zabezpečenou komunikaci mezi backendem a frontendem. Toho docílíme sdílením tokenu, který bude ověřovat
-každý dotaz do té části aplikace, kam mají přístup pouze přihlášení uživatelé. Toho docílíme pomocí modulu, který rožšiřujeme Flask,
+každý dotaz do té části aplikace, kam mají přístup pouze přihlášení uživatelé. Toho docílíme pomocí modulu, který rožšiřujeme \textit{Flask},
 \textit{Flask-jwt-extended}. Pro správnou funkci tohoto modulu je třeba mít nastavený tajný klíč pro aplikaci, který slouží k šifrování \gls{jwt},
 ve kterém se nachází identifikátor uživatele. Dále je potřeba definovat funkce pro načítání uživatele a jeho rolí, toto poté použijeme pro kontrolu
-oprávnění uživatele a získávání dat, která jsou vázána na uživatele, zde je ukázka \ref{lst:flaskJWTCode}. Kromě možnosti sdílení tokenu musíme
+oprávnění uživatele a získávání dat, která jsou vázána na uživatele viz ukázka \ref{lst:flaskJWTCode}. Kromě možnosti sdílení tokenu musíme
 také v naší aplikaci vyřešit možnost bezpečného ukládání hesla v naší databázi. Z~bezpečnostního hlediska je nutné zajistit, nemožnost zpětného
 zjištění hesla zadaného uživatelem. Toto není úplně možné díky \textit{brute force} útokům, neboli útokům hrubou silou, při které jsou zkoušeny
-všechny možné kombinace pro dané heslo. Ovšem tomuto se dá lépe předejít silným heslem. Pro šifrování hesla na databázi použijeme modulu \textit{flask-bcrypt}
+všechny možné kombinace pro dané heslo. Tomuto se dá lépe předejít silným heslem. Pro šifrování hesla na databázi použijeme modulu \textit{flask-bcrypt},
 který implementuje užití hashovací metody bcrypt ve \textit{Flasku}.
 
 \begin{listing}[H]
@@ -54,24 +54,16 @@ def load_user(user):
 
 \subsection{Propojení s databází}
 
-Na toto použijeme další rozšíření pro \textit{Flask} a to konkrétně \textit{Flask-SQLAlchemy}, jedná se interpretaci \textit{SQLAlchemy}, což je \gls{orm} nástroj pro Python.
-Podporuje většinu \gls{sql} implementací a serverů. V našem případě budeme brát \textit{postgresql} jako nejvhodnější jazyk a databázový server se zaručenou podporou pro \textit{sqlite}. Protože
-v aplikaci používáme jako identifikátor všech modelů používáme \gls{guid}, základní implementace \textit{SQLAlchemy} nám ovšem tento datový typ nativně nepodporuje, stejně jako
-některé \gls{sql} servery. Proto si vytvoříme vlastní datový typ \gls{guid}, ukázku jak na to nalezeme i v oficiální dokumentaci \textit{SQLAlchemy} \cite{sqlalchemyGuid}. Jak lze
-vidět v ukázce kódu \ref{lst:guidImplementation}, při vytváření tohoto typu je provedena kontrola, s jakou databází bude aplikace pracovat a podle toho se rozhodne jaký datový typ
-bude v rámci databáze použit. Toto se provádí protože ne všechny databáze si umí poradit s GUID datovým formátem. Další úpravou, kterou provedeme na implementaci
-\textit{Flask-SQLAlchemy} je zavedení si vlastního základního modelu, ze kterého pak budeme vytvářet všechny ostatní modely. Tento základní model bude mít
-v sobě definovaný identifikátor v~GUID formátu, který jsme si zavedli v naší aplikaci. Díky tomu bude mít každý objekt unikátní identifikátor, neboli také primární
-klíč. Díky tomuto bude snadnější a rychlejší vyhledávání dat v databázi a to díky využití indexů, které si databáze automaticky vytváří. Dále si také definujeme
-rozšíření pro modely, které jim bude přidávat určité atribury, tyto atributy jsou stejné v některých tabulkách a nechceme je při vytváření nových tabulek znovu
-vypisovat, proto vytvoříme \textit{model mixin}, tato třída v sobě bude obsahovat pouze definice sloupců, které jsou stejné v těchto určitých tabulkách. Pro upřesnění,
-bude se jednat o zavedení takzvaného \uv{soft delete} systému, který nám bude sloužit k virtuálnímu mazání objektů, objektu se pouze nastaví příznak, že byl smazán, ale nebude
-smazán z databáze, tudíž jej bude možné obnovit. Tato úprava si také ale žádá definovaní upravených databázových dotazů, s tím nám pomůže definice vlastní
-\texttt{QueryClass}, tedy třídy zodpovědné za vytváření dotazů v \textit{Flask-SQLAlchemy} na naší databázi. V této třídě a třídách, které dědí tuto třídu
-si poté vytvoříme nové metody, které budou myslet na filtrování dat s příznakem \texttt{deleted} jako by byly smazané.
+Na toto použijeme další rozšíření pro \textit{Flask} a to konkrétně \textit{Flask-SQLAlchemy}. Jedná se interpretaci \textit{SQLAlchemy}, což je \gls{orm} nástroj pro Python.
+Podporuje většinu \gls{sql} implementací a serverů. V našem případě budeme brát \textit{postgresql} jako nejvhodnější databázový server se zaručenou podporou pro \textit{sqlite}. Protože
+v aplikaci používáme jako identifikátor všech modelů, používáme \gls{guid}. Základní implementace \textit{SQLAlchemy} nám tento datový typ nativně nepodporuje, stejně jako
+některé \gls{sql} servery. Proto si vytvoříme vlastní datový typ \gls{guid}. Ukázku jak na to, nalezeme i v oficiální dokumentaci \textit{SQLAlchemy} \cite{sqlalchemyGuid}. Jak lze
+vidět v ukázce kódu \ref{lst:guidImplementation}, při vytváření tohoto typu je provedena kontrola, s jakou databází bude aplikace pracovat a podle toho se rozhodne, jaký datový typ
+bude v rámci databáze použit. Toto se provádí proto, že ne všechny databáze si umí poradit s GUID datovým formátem.
 
 \begin{listing}[H]
     \begin{minted}[linenos,breaklines]{python}
+#File: moddoc/utils.py
 from sqlalchemy.types import TypeDecorator, CHAR
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
@@ -115,19 +107,73 @@ def process_result_value(self, value, dialect):
     \label{lst:guidImplementation}
 \end{listing}
 
+\clearpage
+
+Další úpravou, kterou provedeme na implementaci
+\textit{Flask-SQLAlchemy} je zavedení vlastního základního modelu, ze kterého pak budeme vytvářet všechny ostatní modely. Tento základní model bude mít
+v sobě definovaný identifikátor v~GUID formátu, který jsme si zavedli v naší aplikaci. Díky tomu bude mít každý objekt unikátní identifikátor, neboli také primární
+klíč. Díky tomu bude snadnější a rychlejší vyhledávání dat v databázi a to s využitím indexů, které si databáze automaticky vytváří. Také si definujeme
+rozšíření pro modely, které jim bude přidávat určité atributy. Tyto atributy jsou stejné v některých tabulkách a nechceme je při vytváření nových tabulek znovu
+vypisovat a proto vytvoříme \textit{model mixin}. Tato třída v sobě bude obsahovat pouze definice sloupců, které jsou stejné v těchto určitých tabulkách. Pro upřesnění,
+bude se jednat o zavedení takzvaného \uv{soft delete} systému, který nám bude sloužit k virtuálnímu mazání objektů, objektu se pouze nastaví příznak, že byl smazán, ale nebude
+smazán z databáze, tudíž jej bude možné obnovit. Tato úprava si ale také žádá definovaní upravených databázových dotazů a s tím nám pomůže definice vlastní
+\texttt{QueryClass}, třídy zodpovědné za vytváření dotazů v \textit{Flask-SQLAlchemy} na naší databázi. V této třídě a třídách, které dědí tuto třídu
+si poté vytvoříme nové metody, které budou připraveny na filtrování dat s příznakem \texttt{deleted}, jako by byly smazané. Ná závěr této části tu máme
+ukázku tříd \ref{lst:sqlalchemyExtensions}, které jsme si nyní popisovali.
+
+\begin{listing}[H]
+    \begin{minted}[linenos,breaklines]{python}
+#Source: http://flask-sqlalchemy.pocoo.org/2.3/customizing/#model-class  # noqa 501
+class IdModel(Model):
+    @declared_attr
+    def id(cls):
+        for base in cls.__mro__[1:-1]:
+            if getattr(base, '__table__', None) is not None:
+                type = sa.ForeignKey(base.id)
+                break
+        else:
+            type = GUID()
+
+        return sa.Column(type, primary_key=True)
+
+
+class SoftDeleteModel(object):
+    created = sa.Column(sa.DateTime, nullable=False, default=datetime.utcnow)
+    updated = sa.Column(sa.DateTime, nullable=True, default=None)
+    deleted = sa.Column(sa.DateTime, nullable=True, default=None)
+
+    def delete(self):
+        self.deleted = datetime.utcnow()
+
+
+class SoftDeleteQuery(BaseQuery):
+    def soft_get(self, id, default=None):
+        object = self.get(id)
+        if object and object.deleted is None:
+            return object
+        else:
+            return default
+
+    def soft_all(self):
+        return self.filter_by(deleted=None).all()
+    \end{minted}
+    \caption{Ukázka rozšiřujících tříd pro \textit{Flask-SQLAlchemy}}
+    \label{lst:sqlalchemyExtensions}
+\end{listing}
+
 \subsection{Kontrola příchozích dat}
 
-Jako v každém programu je potřeba kontrolovat vstupní data, je i v našem případě nutné kontrolovat data, která přijdou z našeho frontendu, nebo\linebreak například z mobilní aplikace,
+Jako v každém programu je potřeba kontrolovat vstupní data, je také v našem případě nutné kontrolovat data, která přijdou z našeho frontendu, nebo\linebreak například z mobilní aplikace,
 která se bude připojovat na náš backend. Pro kontrolu dat použijeme implementaci schémat z dalšího modulu pro Python, \textit{marshmallow}. Tento modul nám umožní definovat
 nejen formát dat, ale také definuje formát výstupních dat, která budou načtena přímo z~výstupu dotazu nebo objektu z~\textit{SQLAlchemy}.
 
 \subsection{Generování dokumentů}
 
-Asi nejdůležitější částí je generování samotných dokumentů. Jak již bylo\linebreak v~textu této práce zmíněno, bude využit software Pandoc \cite{pandocSW}, abychom mohli s tímto softwarem
-komunikovat, využijeme modul \textit{pypandoc}, který nám poskytne \gls{api} rozhraní pro komunikaci s Pandoc. Pro vytvoření našeho dokumenty již máme skoro vše potřebné, nyní
+Asi nejdůležitější částí je generování samotných dokumentů. Jak již bylo\linebreak v~textu této práce zmíněno, bude využit software Pandoc. \cite{pandocSW}, Pro komunikaci s tímto 
+softwarem využijeme modul \textit{pypandoc}, který nám poskytne \gls{api} rozhraní pro komunikaci s Pandoc. Pro vytvoření našeho dokumentu již máme skoro vše potřebné. Nyní
 je potřeba pouze zajistit zdrojové soubory, ze kterých by se mohl výsledný dokument skládat. Protože si u~každého dokumentu pamatujeme, jaké repozitáře jsou použity, můžeme
 tyto repozitáře projít a pro každý modul v nich obsažený vytvořit soubor, který bude obsahovat data z modulu. Název takového souboru se pak bude určovat podle identifikátoru
-z databáze pro tento modul. Pokud bude v dokumentu použit odkaz na tento identifikátor bude zaručeno, že dokument bude generován vždy s nejnovější verzí modulu. Pro generování
+z databáze pro tento modul. Pokud bude v dokumentu použit odkaz na tento identifikátor, bude zaručeno, že dokument bude generován vždy s nejnovější verzí modulu. Pro generování
 dokumentu se specifickou verzí modulu, je třeba uvést jako odkaz identifikátor této verze. Před každým generování dokumentu se nejdříve vytvoří všechny potřebné soubory z modulů,
 které mohou být použity v dokumentu a poté se už provede samotné generování dokumentu, který je poté vrácen skrze \gls{api}.
 
@@ -135,9 +181,10 @@ které mohou být použity v dokumentu a poté se už provede samotné generová
 
 \subsection{Struktura backendu}
 
-Přehlednost kódu je jedna z důležitých vlastností aplikace, kterou je snadné udržovat a rozšiřovat. Tomu může i velice pomoct přehledná a intuitivní adresářová struktura.
-V rámci backendu máme ještě možnost rozdělit si tuto strukturu podle jednotlivých vrstev, které se v naší aplikaci objevují. Například databázové modely mohou být ve vlastní složce,
-nebo všechny \gls{api} metody lze přesunout do jedné složky a rozdělit do souborů, podle toho, k jaké entitě se dané metody vážou.
+Přehlednost kódu je jedna z důležitých vlastností aplikace, kterou je snadné udržovat a rozšiřovat. Tomu může i velice pomoct přehledná a intuitivní
+adresářová struktura \ref{lst:backendDir}.
+V rámci backendu máme ještě možnost rozdělit si tuto strukturu podle jednotlivých vrstev, které se v naší aplikaci objevují. Napří\-klad databázové modely mohou být ve vlastní složce,
+nebo všechny \gls{api} metody lze přesunout do jedné složky a rozdělit do souborů, podle toho, k~jaké entitě se dané metody vážou.
 
 \begin{listing}[H]
     \dirtree{%
@@ -152,15 +199,16 @@ nebo všechny \gls{api} metody lze přesunout do jedné složky a rozdělit do s
         .2 \_\_init\_\_.py\DTcomment{základní soubor, obsahuje vytvoření instance Flasku}.
         .2 utils.py\DTcomment{utility použiváné v aplikaci}.
     }
+    \caption{Popis strutkury adresářů pro backend}
+    \label{lst:backendDir}
 \end{listing}
-
 
 \section{Frontend}
 
 Jako jazyk, ve kterém budeme vyvíjet frontend, volíme JavaScript, který je podporován všemi webovými prohlížeči a umožňujeme nám vytvářet aplikace
 přímo v něm. Další jeho přednosti jsou jednoduchost implementace, efektivita a bezpečnost. S popularitou tohoto jazyka roste počet framewroků a knihoven,
 které lze použít pro vytváření webových aplikací. Dnes mezi nejznámější patří \textit{VueJS}, \textit{React} a \textit{Angular}. Pouze \textit{Angular} je ovšem plnohodnotný framework, zbylé
-2 jsou pouze knihovnami. \cite{jsComparasion} Pro naší aplikaci zvolíme ovšem React a to z několika důvodů:
+2 jsou pouze knihovnami. \cite{jsComparasion} Pro naší aplikaci zvolíme ovšem \textit{React} a to z několika důvodů:
 \begin{enumerate}
     \item jednoduchý a lehce pochopitelný
     \item snadná rozšiřitelnost, díky velkému množství balíčků
@@ -168,29 +216,31 @@ které lze použít pro vytváření webových aplikací. Dnes mezi nejznáměj�
     \item jednoduchá možnost dalšího rozšiřování již napsané aplikace, díky znovuvyužití již napsaných komponent.
 \end{enumerate}
 
-\textit{React} je, jak již bylo řečeno výše, knihovna psaná v JavaScriptu pro vytváření webových aplikací. Tato knihovna nám zajištuje základ pro vytváření webového grafického rozhraní.
+\textit{React} je, jak již bylo řečeno výše, knihovna psaná v JavaScriptu pro vytvá\-ření webových aplikací. Tato knihovna nám zajištuje základ pro vytváření webového grafického rozhraní.
 \textit{React} rozděluje
-jednotlivé prvky z rozhraní do komponent, které se poté dají kombinovat, znovu využívat a dá se u nich definovat rozšiřující chování. Na psaní v \textit{Reactu} není potřeba psaní
-si vlastních šablon, vše je psáno přímo v JavaScriptovém kódu. \cite{reactJS} Samotný React poté ještě rozšíříme o další knihovny, které nám usnadní práci s daty, přidají
-další komponenty, abychom je nemuseli znovu vytvářet sami a také zajistí správnou komunikaci s backendem.
+jednotlivé prvky z rozhraní do komponent, které se poté dají kombinovat, znovu využívat a také se dá u nich definovat rozšiřující chování. Na psaní v \textit{Reactu} není potřeba
+definování
+si vlastních šablon. Vše je psáno přímo v JavaScriptovém kódu. \cite{reactJS} Samotný \textit{React} poté ještě rozšíříme o další knihovny, které nám usnadní práci s daty, přidají
+další komponenty, abychom je nemuseli znovu vytvářet.
 
 \subsection{Redux}
 
-Tím asi nejdůležitějším rozšířením Reactu v této práci je knihovna \textit{Redux}. \textit{Redux} je, stejně jako \textit{React}, také knihovna pro JavaScript. Jeho hlavní funkcí je
-ukládání si stavů aplikace, tudíž je možné předem nadefinovat všechny stavy, ve kterých se naše aplikace může objevit a není problém se pohybovat na časové
-díky této vlastnosti. Je dobré podotknout, že tyto stavy jsou perzistentní. Pro propojení s Reactem existuje knihovna \textit{React-Redux} přímo od vývojářů \textit{Reduxu}. \cite{redux}
+Nejdůležitějším rozšířením \textit{Reactu} v této práci je knihovna \textit{Redux}. \textit{Redux} je, stejně jako \textit{React}, také knihovna pro JavaScript. Jeho hlavní funkcí je
+ukládání si stavů aplikace, tudíž je možné předem nadefinovat všechny stavy, ve kterých se naše aplikace může objevit a není problém se pohybovat na časové ose
+díky této vlastnosti. Je dobré podotknout, že tyto stavy jsou perzistentní. Pro propojení s \textit{Reactem} existuje knihovna \textit{React-Redux} přímo od vývojářů \textit{Reduxu}. \cite{redux}
 Díky tomuto je v \textit{Reactu} poté možné znovu načítat pouze jednotlivé komponenty a není potřeba načítat celou stránku znovu, což má za následek rychlejší odezvu stránek.
-Propojení \textit{React} komponenty s \textit{Redux} je jednoduché, stačí definovat takzvaný \textit{reducer}, neboli definici změny stavů v~závislosti na akcích. Toto je
-poté jednoduše přemapováno na \textit{props}, což jsou vstupní hodnoty pro komponety, komponenty mají tedy přehled o aktuálním stavu aplikace a při změně se znovu vykreslují.
+Propojení \textit{React} komponenty s \textit{Redux} je jednoduché. Stačí definovat takzvaný \textit{reducer}, neboli definici změny stavů v~závislosti na akcích. Toto je
+následně jednoduše přemapováno na \textit{props}, což jsou vstupní hodnoty pro komponety. Komponenty mají přehled o aktuálním stavu aplikace a při změně se znovu vykreslují.
 
 \subsection{Reactstrap a formuláře}
 
-Pro frontend je táké důležité, aby všechny ovládácí prvky byly stejné a celá aplikace měla jednotný design. \textit{Reactstrap} je knihovna rozšiřující \text{React} o komponenty,
-které jsou již nastylované a to za použití \textit{Bootstrap} stylů. Tyto komponenty jsou poté použity v celé aplikaci a díky Bootstrapu nemusíme vytvářet vlastní styly,
-pokud si vystačíme s tím, co nám nábízí \textit{Bootstrap}. \textit{Reactstrap} také nabízí sadu stylů pro formuláře, jejich validace bez odeslání dat by byla náročná, proto
-využijeme balíčku \textit{availity-reactstrap-validation}, který obaluje \textit{Reactstrap} komponenty vlastními. Tyto komponenty poté nabízejí jednoduchou formou možnost
-definovat pravidla, která musí platit pro jednotlivé pole ve formulářích, zde je menší ukázka formuláře z komponenty pro přihlášení \ref{lst:loginForm}. Prvky \texttt{AvInput}
-jsou deklarovány s atributem \texttt{required}, který říká, že dané pole nesmí být prázdné, pokud by bylo, objeví se zpráva, která je definována pro daný \texttt{AvInput} v
+Pro frontend je táké důležité, aby všechny ovládácí prvky byly stejné a celá aplikace měla jednotný design. \textit{Reactstrap} je knihovna rozšiřující \textit{React}
+o komponenty,
+které jsou již nastylované a to za použití \textit{Bootstrap} stylů. Tyto komponenty jsou následně použity v celé aplikaci a díky Bootstrapu nemusíme vytvářet vlastní styly,
+pokud si vystačíme s tím, co nám nábízí \textit{Bootstrap}. \textit{Reactstrap} nabízí sadu stylů pro formuláře. Jejich validace bez odeslání dat by byla náročná, proto
+využijeme balíčku \textit{availity-reactstrap-validation}, který obaluje \textit{Reactstrap} vlastními komponenty. Tyto komponenty nabízejí jednoduchou formou možnost
+definovat pravidla, která musí platit pro jednotlivá pole ve formulářích. Zde \ref{lst:loginForm} je menší ukázka formuláře z komponenty pro přihlášení. Prvky \texttt{AvInput}
+jsou deklarovány s atributem \texttt{required}, který říká, že dané pole nesmí být prázdné. Pokud by bylo, objeví se zpráva, která je definována pro daný \texttt{AvInput} v
 \texttt{AvFeedback}. Definování \texttt{AvGroup} je zde pro to, abychom odlišili jednotlivé části formuláře a mohli pro ně definovat 2 různá chybová hlášení v~závislosti na
 tom, kterého vstupu se chyba týká. Pokud by se přesto někdo pokusil odeslat formulář s neuplnými daty, je zde podmínka, která tomu braní a to v metodě \texttt{this.handleSubmit}
 na ukázce \ref{lst:conditionForm}.
@@ -217,6 +267,7 @@ na ukázce \ref{lst:conditionForm}.
 
 \begin{listing}[H]
     \begin{minted}[linenos,breaklines]{js}
+//File: src/Auth/LoginPage.jsx LoginPage
 handleSubmit(e, err, val) {
     if (err.length == 0) {
         this.props.login(val);
@@ -229,14 +280,16 @@ handleSubmit(e, err, val) {
 
 \subsection{Další moduly}
 
-V rámci aplikace je dobré od jejího začátku myslet na možnou lokalizaci textů, k tomu nám pomůže knihovna \textit{react-i18next}, díky které bude jednoduché překládat
-jednotlivé části aplikace. Pro snažší komunikaci s backendem využijeme balíčku \textit{refresh-fetch}, tento balíček nám poslouží pro jednoduchout implementaci obnovování přístupového
+V rámci aplikace je dobré od jejího začátku myslet na možnou lokalizaci textů a k tomu nám pomůže knihovna \textit{react-i18next}, díky které bude jednoduché překládat
+jednotlivé části aplikace. Pro snažší komunikaci s backendem využijeme balíčku \textit{refresh-fetch}. Tento balíček nám poslouží pro jednoduchout implementaci obnovování přístupového
 \gls{jwt} tokenu za pomoci obnovovacího tokenu.
+
+\clearpage
 
 \subsection{Struktura aplikace}
 
-Aby se při vytváření aplikace dalo snáze orientovat v již napsaném kódu, investujeme chvilku času do definování a vytvoření adresářové struktury \ref{dir:frontStruct}. Ta nám
-pomůže jednoduše určit, kde se nacházejí jednotlivé části aplikace, je třeba dobré rozdělit části týkající se pouze Reduxu do vlastní složky, či je dobré roztřídit
+Pro snažší orientaci při vytváření aplikace, investujeme chvilku času do definování a vytvoření adresářové struktury \ref{dir:frontStruct}. Ta nám
+pomůže jednoduše určit, kde se nacházejí jednotlivé části aplikace. Je dobré rozdělit části týkající se pouze \textit{Reduxu} do vlastní složky, či roztřídit
 jednotlivé komponenty podle toho, které části aplikace se týkají.
 
 \begin{listing}[H]

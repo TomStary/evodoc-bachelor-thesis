@@ -1,53 +1,54 @@
 \section{Testování}
 
-V rámci vývoje je také potřeba testovat a zároveň i dokumentovat jednotlivé části. V našem případě při vývoji použijeme
+V rámci vývoje je potřeba testovat a zároveň i dokumentovat jednotlivé části. V našem případě při vývoji použijeme
 k testování \gls{api} nástroj Postman \cite{postmanSW}, který nám poslouží nejen k dokumentaci našeho backendového \gls{api},
 ale také bude fungovat k okamžitému testování našich metod. V Postman je možné definovat jednotlivé dotazy pro náš server s možností
 jejich parametrizace a automatického přidání \gls{jwt} tokenu pro ověření uživatele. Mimo možnosti definovat jednotlivé dotazy, lze také vytvořit
-pro celé prostředí jednotnou sadu parametrů, které poté mohou být využity v dotazech, ať již ve formě parametrů v \gls{url} nebo také k ukládání
-proměnných, které se mohou lišit mezi zařízeními (například adresa testovacího serveru). Na přiloženém médiu je poté kompletní výstup z
+pro celé prostředí jednotnou sadu parametrů, které mohou být využity v dotazech, ať již ve formě parametrů v \gls{url} nebo k ukládání
+proměnných, které se mohou lišit mezi zařízeními (například adresa testovacího serveru). Na přiloženém médiu je kompletní výstup z
 tohoto programu. Program je volně ke stažení a je možné sdílet data z jednoho zařízení na další v rámci jednoho účtu, nebo sdílet data
-v týmu, tato možnost je již ovšem za poplatek.
+v týmu. Tato možnost je již ovšem za poplatek.
 
-Výsledné testování proběhne pomocí akceptačních testů, jedná se o testy,
+Výsledné testování proběhne pomocí akceptačních testů. Jedná se o testy,
 které jsou provedeny manuálně před samotným nasazením aplikace na produkční prostředí. Testy jsou prováděny podle příkladů užití z návrhu.
-Toto testování probíhalo v konfiguraci co nejvíce podobné produkčnímu prostředí, aby nevznikly poté potíže v důsledku jiného prostředí, či
+
+Testování probíhalo v konfiguraci co nejvíce podobné produkčnímu pro\-středí, aby nevznikly potíže v důsledku jiného prostředí, či
 rozdílných konfigurací. Testy se prováděly podle příkladů užití z návrhu. Na základě těchto testů ještě byly provedeny patřičné změny v aplikaci.
-Zde je ukázka takového testu pro vytvoření nového uživatelského účtu, příhlášení se a poté také možnosti tento účet upravit.
+Zde je ukázka takového testu pro vytvoření nového uživatelského účtu, příhlášení se a také možnosti tento účet upravit.
 Nejdříve jsme si vytvořili seznam částí programu, které chceme podrobit testování.
 \begin{enumerate}
     \item Uživatel musí mít možnost se zaregistrovat s platnými údaji, pokud údaje jsou neúplné, či neplatné je třeba o tom uživatele informovat.
     \item Registrovaný uživatel je poté schopen se přihlásit do svého nově vytvořeného účtu.
-    \item Přihlášený uživatel má možnost měni své údaje.
+    \item Přihlášený uživatel má možnost měnit své údaje.
 \end{enumerate}
 Na základě tohoto seznamu proběhly kontroly všech zmíněných částí. Problém nastal pouze u změny údajů, kdy se uživateli nezobrazovalo chybové
 hlášení při změně údajů na údaje, které ovšem v systému má již jiný uživatel. Podobně byl poté takto zkontrolován celý systém.
-A podle jednotlivých průchodý jsme posléze opravili chyby, které se v systému vyskytovali. Po těchto testech je naše aplikace
+A podle jednotlivých průchodů jsme posléze opravili chyby, které se v systému vyskytovaly. Po těchto testech je naše aplikace
 připravena k nasazení na produkční prostředí.
 
 \section{Nasazení}
 
-Nasazení aplikací se od sebe trochu liší, proto tuto část rozdělíme na 2, ve kterých popíšeme nasazení jednotlivých částí nejenom na produkční
-prostředí, ale také jejich vývojové prostředí.
+Nasazení aplikací se od sebe trochu liší. Proto tuto část rozdělíme na 2, ve kterých popíšeme nasazení jednotlivých částí na
+produkční prostředí.
 
 \subsection{Backend}
 
 Pro nasazení backendu použijeme knihovnu pro jazyk Python, \textit{Setuptools} \cite{setupTools}, tato knihovna nám umožní
 jednoduše nainstlovat všechny potřebné balíčky, které budeme potřebovat pro běh naší aplikace. Pro nasazení na server
-tedy stačí na serveru spustit příkaz \texttt{python setup.py install}, jedinou podmínkou je přitomnost \textit{Setuptools}
-na serveru. Před instalací je také dobré nastavit nové připojení na databázi a bezpečnostní klíč. Toto se provede vytvořením
+stačí na serveru spustit příkaz \texttt{python setup.py install}. Jedinou podmínkou je přitomnost \textit{Setuptools}
+na serveru. Před instalací je dobré nastavit nové připojení na databázi a bezpečnostní klíč. Toto se provede vytvořením
 souboru \texttt{config.py} ve složce \texttt{instance}, kterou je potřeba vytvořit v hlavním adresáři aplikace. \textit{Flask} sice nabízí možnost vlastního serveru, jedná se ovšem
-pouze o~funkci, která má sloužit vývojářům při vývoji, pro ostré nasazení je toto řešení nestabilní. Proto je potřeba použití WSGI (Web Server Gateway Interface), jedná se o~interface
-mezi webovým serverem a webovou aplikací psanou v~jazyce Python. Některé webové servery mají tuto vlastnost již přímo integrovanou (Apache), které WSGI ovšem bude zvoleno
-je čistě na správci serveru, na stránkách dokumentace k \textit{Flask} naleznete ukázky pro jednotlivá řešení \cite{flaskDeploy}.
+pouze o~funkci, která má sloužit vývojářům při vývoji. Pro ostré nasazení je toto řešení nestabilní, proto je potřeba použití WSGI (Web Server Gateway Interface). Jedná se o~interface
+mezi webovým serverem a webovou aplikací psanou v~jazyce Python. Některé webové servery mají tuto vlastnost již přímo integrovanou (Apache), které WSGI bude zvoleno
+je čistě na správci serveru. Na stránkách dokumentace k \textit{Flask} naleznete ukázky pro jednotlivá řešení \cite{flaskDeploy}.
 
 
 \subsection{Frontend}
 
-Pro frontend využijeme \textit{webpack}, jedná se o modul, který slouží k vytváření balíčků z našeho zdrojového kódu. Tento modul
+Pro frontend využijeme \textit{webpack}. Jde se o modul, který slouží k vytváření balíčků z našeho zdrojového kódu. Tento modul
 využijeme již v průběhu vývoje naší aplikace, kdy nám bude kompilovat naše soubory pro lokální použití a také kontroluje importy a exporty
-souborů, aby nenastal problém s chybějící referencí. \textit{Webpack} si také umí poradit se soubory ve formátu \gls{scss}, které přeloží
-do formátu \gls{css}. Ovšem \textit{webpack} neslouží pouze k obsluze vývojového serveru, ale dá se použít i jako kompilátor pro výsledné
-produkční prostředí. Pro tuto vlastnost stačí použít příkaz \texttt{webpack -p --config webpack.config.js}, \textit{webpack} poté vytvoří
-ve složce \texttt{dist} výsledný \texttt{main.js} a další soubory. Tyto soubory lze poté nahrát na produkční server, kde aplikace bude
+souborů, aby nenastal problém s chybějící referencí. \textit{Webpack} si umí poradit se soubory ve formátu \gls{scss}, které přeloží
+do formátu \gls{css}. \textit{Webpack} neslouží pouze k obsluze vývojového serveru, ale dá se použít i jako kompilátor pro výsledné
+produkční prostředí. Pro tuto vlastnost stačí použít příkaz \texttt{webpack -p --config webpack.config.js},\linebreak \textit{webpack} poté vytvoří
+ve složce \texttt{dist} výsledný \texttt{main.js} a další soubory. Tyto soubory lze následně nahrát na produkční server, kde aplikace bude
 umístěna.
